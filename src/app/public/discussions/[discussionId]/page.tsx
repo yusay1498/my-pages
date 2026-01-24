@@ -13,7 +13,7 @@ export async function generateStaticParams() {
   return discussionIds.map((id) => ({ discussionId: id }));
 }
 
-export const dynamicParams = true;
+export const dynamicParams = false;
 
 const PublicDiscussionPage = ({
   params: { discussionId },
