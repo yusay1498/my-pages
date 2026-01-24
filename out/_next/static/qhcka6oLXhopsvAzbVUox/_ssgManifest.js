@@ -1,0 +1,1 @@
+self.__SSG_MANIFEST=new Set(["\u002Fapp\u002Fdiscussions\u002F[discussionId]","\u002Fpublic\u002Fdiscussions\u002F[discussionId]"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()

@@ -1,10 +1,6 @@
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from '@tanstack/react-query';
+import { Suspense } from 'react';
 
-import { getDiscussionsQueryOptions } from '@/features/discussions/api/get-discussions';
+import { Spinner } from '@/components/ui/spinner';
 
 import { Discussions } from './_components/discussions';
 
@@ -13,25 +9,13 @@ export const metadata = {
   description: 'Discussions',
 };
 
-const DiscussionsPage = async ({
-  searchParams,
-}: {
-  searchParams: { page: string | null };
-}) => {
-  const queryClient = new QueryClient();
-
-  await queryClient.prefetchQuery(
-    getDiscussionsQueryOptions({
-      page: searchParams.page ? Number(searchParams.page) : 1,
-    }),
-  );
-
-  const dehydratedState = dehydrate(queryClient);
-
+const DiscussionsPage = () => {
+  // 静的エクスポートではsearchParamsは使用できない
+  // useSearchParams()を使用するコンポーネントはSuspenseでラップする
   return (
-    <HydrationBoundary state={dehydratedState}>
+    <Suspense fallback={<Spinner />}>
       <Discussions />
-    </HydrationBoundary>
+    </Suspense>
   );
 };
 
