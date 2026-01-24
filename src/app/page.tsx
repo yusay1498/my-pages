@@ -1,10 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { Link } from '@/components/ui/link';
 import { paths } from '@/config/paths';
-import { checkLoggedIn } from '@/utils/auth';
 
 const HomePage = () => {
-  const isLoggedIn = checkLoggedIn();
+  // 静的エクスポートではcookiesを使用したログイン状態の確認ができません
+  // 常にfalseを返すため、ユーザーはログインページに誘導されます
+  const isLoggedIn = false;
 
   return (
     <div className="flex h-screen items-center bg-white">
