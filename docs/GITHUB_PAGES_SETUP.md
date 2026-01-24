@@ -51,10 +51,13 @@ https://<username>.github.io/<repository-name>/
 ## 注意事項
 
 - **Secretの設定は不要です** - GitHub PagesへのデプロイにはCLOUDFLARE_API_TOKENやCLOUDFLARE_ACCOUNT_IDなどのシークレットは必要ありません
-- **環境変数の設定** - ワークフローファイル（`.github/workflows/deploy.yml`）内の`NEXT_PUBLIC_API_URL`などの環境変数は、実際のAPI URLに更新してください。現在はプレースホルダー値（`https://api.example.com`）が設定されています
+- **環境変数の設定** - ワークフローファイル（`.github/workflows/deploy.yml`）内の環境変数は、実際の環境に合わせて更新してください：
+  - `NEXT_PUBLIC_BASE_PATH`: GitHubのリポジトリ名（デフォルト: `/my-pages`）
+  - `NEXT_PUBLIC_API_URL`: 実際のAPI URL（現在はプレースホルダー値 `https://api.example.com`）
+  - `NEXT_PUBLIC_URL`: デプロイ先のURL
 - Next.jsの静的エクスポートが有効になっているため、動的なサーバーサイド機能（API Routes、Server Components等）は使用できません
 - 画像最適化機能は無効化されています（GitHub Pagesでは対応していないため）
-- 動的ルートは限定的なサポートです - 現在は各動的ルートで1つのページ（ID: '1'）のみが生成されます。本番環境では、実際のデータソースからIDを取得するように`generateStaticParams()`を更新してください
+- 動的ルートのサポート - 現在は各動的ルートで3つのページ（ID: '1', '2', '3'）が生成されます。本番環境では、実際のデータソースからIDを取得するように`generateStaticParams()`を更新してください
 
 ## トラブルシューティング
 
