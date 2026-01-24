@@ -3,7 +3,8 @@ import { Link } from '@/components/ui/link';
 import { paths } from '@/config/paths';
 
 const HomePage = () => {
-  // 静的エクスポートではログイン状態を確認できないため、常にfalseを返す
+  // Static export does not support checking login status via cookies
+  // Always returns false, so users will be directed to the login page
   const isLoggedIn = false;
 
   return (
