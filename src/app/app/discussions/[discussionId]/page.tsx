@@ -8,9 +8,9 @@ export const metadata = {
 };
 
 export async function generateStaticParams() {
-  // For static export, return a minimal set of params
-  // In production, this should fetch actual discussion IDs from your data source
-  // Currently only generates a single page with ID '1' as a placeholder
+  // 静的エクスポートの場合、最小限のパラメータセットを返します
+  // 本番環境では、実際のデータソースからディスカッションIDを取得する必要があります
+  // 現在はプレースホルダーとしてID '1'の単一ページのみを生成します
   return [{ discussionId: '1' }];
 }
 

@@ -10,8 +10,8 @@ export const metadata = {
 };
 
 const DiscussionsPage = () => {
-  // Static export does not support searchParams
-  // Components using useSearchParams() must be wrapped with Suspense
+  // 静的エクスポートではsearchParamsをサポートしていません
+  // useSearchParams()を使用するコンポーネントはSuspenseでラップする必要があります
   return (
     <Suspense fallback={<Spinner />}>
       <Discussions />
