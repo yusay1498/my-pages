@@ -30,7 +30,7 @@ export default async function PostPage({
   const updatedAtDisplay = post.meta.updatedAt.replaceAll('-', '/');
 
   return (
-    <main className="mx-auto w-full max-w-4xl px-4 py-12">
+    <div className="mx-auto w-full max-w-4xl px-4 py-12">
       <header className="mb-10">
         <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-gray-100">
           {post.meta.title}
@@ -63,6 +63,6 @@ export default async function PostPage({
           </Fragment>
         ))}
       </div>
-    </main>
+    </div>
   );
 }
