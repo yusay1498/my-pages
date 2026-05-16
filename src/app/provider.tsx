@@ -1,5 +1,6 @@
 'use client';
 
+import { ThemeProvider } from 'next-themes';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -11,8 +12,10 @@ type AppProviderProps = {
 
 export const AppProvider = ({ children }: AppProviderProps) => {
   return (
-    <ErrorBoundary FallbackComponent={MainErrorFallback}>
-      {children}
-    </ErrorBoundary>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <ErrorBoundary FallbackComponent={MainErrorFallback}>
+        {children}
+      </ErrorBoundary>
+    </ThemeProvider>
   );
 };
