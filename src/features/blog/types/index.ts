@@ -1,33 +1,33 @@
 export type PostMetaStatus = 'draft' | 'published';
 
 export type PostMeta = {
-  title: string;
-  description: string;
-  tags: string[];
-  createdAt: string;
-  updatedAt: string;
-  status: PostMetaStatus;
+  readonly title: string;
+  readonly description: string;
+  readonly tags: readonly string[];
+  readonly createdAt: string;
+  readonly updatedAt: string;
+  readonly status: PostMetaStatus;
 };
 
 export type Article = {
-  filename: string;
-  number: number;
-  content: string;
+  readonly filename: string;
+  readonly number: number;
+  readonly content: string;
 };
 
 export type Post = {
-  slug: string;
-  meta: PostMeta;
-  articles: Article[];
+  readonly slug: string;
+  readonly meta: PostMeta;
+  readonly articles: readonly Article[];
 };
 
 export type PostSummary = {
-  slug: string;
-  meta: PostMeta;
+  readonly slug: string;
+  readonly meta: PostMeta;
 };
 
 export type TocItem = {
-  id: string;
-  text: string;
-  level: 2 | 3;
+  readonly id: string;
+  readonly text: string;
+  readonly level: 2 | 3;
 };

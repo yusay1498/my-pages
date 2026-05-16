@@ -74,6 +74,8 @@ my-pages/
 
 ### ディレクトリ設計方針
 
+ディレクトリ構成は [bulletproof-react](https://github.com/alan2207/bulletproof-react) のプロジェクト構造を参考にしています。feature ベースでモジュールを分離し、各 feature が独自の components / lib / types を持つことでスケーラブルな構成を実現しています。
+
 | ディレクトリ | 役割 |
 |---|---|
 | `src/features/` | 機能単位で閉じたモジュール。各featureは独自のcomponents/lib/typesを持つ |

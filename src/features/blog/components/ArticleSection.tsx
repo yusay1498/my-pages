@@ -6,15 +6,29 @@ import { generateHeadingId } from '@/features/blog/lib/heading';
 import type { Article } from '@/features/blog/types';
 
 type ArticleSectionProps = {
-  article: Article;
-  headingIdMap: Map<string, string>;
+  readonly article: Article;
+  readonly headingIdMap: ReadonlyMap<string, string>;
 };
 
 type ContentSegment =
-  | { type: 'markdown'; content: string; tokenIndex: number }
-  | { type: 'mermaid'; code: string; tokenIndex: number };
+  | {
+      readonly type: 'markdown';
+      readonly content: string;
+      readonly tokenIndex: number;
+    }
+  | {
+      readonly type: 'mermaid';
+      readonly code: string;
+      readonly tokenIndex: number;
+    };
 
-const ALLOWED_URI_SCHEMES = ['http', 'https', 'mailto'];
+const ALLOWED_URI_SCHEMES = ['http', 'https', 'mailto'] as const;
+
+/** DOMPurify に渡す URI スキーム制限の正規表現（モジュールスコープで1度だけ生成） */
+const ALLOWED_URI_REGEXP = new RegExp(
+  `^(${ALLOWED_URI_SCHEMES.join('|')}):`,
+  'i',
+);
 
 /**
  * marked.lexer() でトークン分割し、mermaid コードブロックと
@@ -92,10 +106,7 @@ const ArticleSection = ({ article, headingIdMap }: ArticleSectionProps) => {
     }) as string;
 
     const html = DOMPurify.sanitize(rawHtml, {
-      ALLOWED_URI_REGEXP: new RegExp(
-        `^(${ALLOWED_URI_SCHEMES.join('|')}):`,
-        'i',
-      ),
+      ALLOWED_URI_REGEXP,
     });
 
     return <div key={key} dangerouslySetInnerHTML={{ __html: html }} />;

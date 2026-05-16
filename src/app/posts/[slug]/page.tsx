@@ -1,10 +1,15 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Fragment } from 'react';
 
 import ArticleSection from '@/features/blog/components/ArticleSection';
 import TableOfContents from '@/features/blog/components/TableOfContents';
 import { extractTocItems } from '@/features/blog/lib/heading';
-import { getAllSlugs, getPostBySlug } from '@/features/blog/lib/posts';
+import {
+  getAllSlugs,
+  getPostBySlug,
+  getPostMetaBySlug,
+} from '@/features/blog/lib/posts';
 
 export const dynamicParams = false;
 const PLACEHOLDER_SLUG = '__placeholder__';
@@ -17,11 +22,25 @@ export async function generateStaticParams() {
     : [{ slug: PLACEHOLDER_SLUG }];
 }
 
-export default async function PostPage({
+type PageParams = { params: Promise<{ slug: string }> };
+
+export async function generateMetadata({
   params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+}: PageParams): Promise<Metadata> {
+  const { slug } = await params;
+  const meta = getPostMetaBySlug(slug);
+
+  if (!meta || meta.status !== 'published') {
+    notFound();
+  }
+
+  return {
+    title: meta.title,
+    description: meta.description,
+  };
+}
+
+export default async function PostPage({ params }: PageParams) {
   const { slug } = await params;
   const post = getPostBySlug(slug);
 
