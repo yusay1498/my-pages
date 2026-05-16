@@ -87,6 +87,15 @@ const getPostDirBySlug = (slug: string): string | null => {
   }
 };
 
+export const getPostMetaBySlug = (slug: string): PostMeta | null => {
+  const postDir = getPostDirBySlug(slug);
+  if (!postDir) {
+    return null;
+  }
+
+  return readPostMeta(postDir);
+};
+
 export const getPostBySlug = (slug: string): Post | null => {
   const postDir = getPostDirBySlug(slug);
   if (!postDir) {

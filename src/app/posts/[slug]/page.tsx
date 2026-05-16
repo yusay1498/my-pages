@@ -5,7 +5,11 @@ import { Fragment } from 'react';
 import ArticleSection from '@/features/blog/components/ArticleSection';
 import TableOfContents from '@/features/blog/components/TableOfContents';
 import { extractTocItems } from '@/features/blog/lib/heading';
-import { getAllSlugs, getPostBySlug } from '@/features/blog/lib/posts';
+import {
+  getAllSlugs,
+  getPostBySlug,
+  getPostMetaBySlug,
+} from '@/features/blog/lib/posts';
 
 export const dynamicParams = false;
 const PLACEHOLDER_SLUG = '__placeholder__';
@@ -24,15 +28,15 @@ export async function generateMetadata({
   params,
 }: PageParams): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const meta = getPostMetaBySlug(slug);
 
-  if (!post || post.meta.status !== 'published') {
+  if (!meta || meta.status !== 'published') {
     notFound();
   }
 
   return {
-    title: post.meta.title,
-    description: post.meta.description,
+    title: meta.title,
+    description: meta.description,
   };
 }
 
