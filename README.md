@@ -26,7 +26,7 @@ npm run dev
 | --- | --- |
 | `npm run dev` | 開発サーバーを起動 |
 | `npm run build` | 静的サイトをビルド |
-| `npm run start` | ビルド済みサイトを起動 |
+| `npx serve@latest out` | ビルド済みの静的サイト（`out/`）を配信 |
 | `npm run lint` | ESLint を実行 |
 | `npm run check-types` | TypeScript の型チェック |
 
