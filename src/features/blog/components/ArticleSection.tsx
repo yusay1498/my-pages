@@ -1,7 +1,7 @@
 import DOMPurify from 'isomorphic-dompurify';
 import { marked } from 'marked';
 
-import MermaidBlock from '@/features/blog/components/MermaidBlock';
+import MermaidBlockLazy from '@/features/blog/components/MermaidBlockLazy';
 import { generateHeadingId } from '@/features/blog/lib/heading';
 import type { Article } from '@/features/blog/types';
 
@@ -11,38 +11,47 @@ type ArticleSectionProps = {
 };
 
 type ContentSegment =
-  | { type: 'markdown'; content: string; startIndex: number }
-  | { type: 'mermaid'; code: string; startIndex: number };
+  | { type: 'markdown'; content: string; tokenIndex: number }
+  | { type: 'mermaid'; code: string; tokenIndex: number };
 
 const ALLOWED_URI_SCHEMES = ['http', 'https', 'mailto'];
 
-// mermaidコードフェンスのパターン（gフラグ付きはlastIndexを持つため関数内でリセットが必要）
-const MERMAID_FENCE_RE = /^```mermaid\s*\r?\n([\s\S]*?)\n\s*```$/gm;
-
-/** Markdownコンテンツをmermaidブロックと通常Markdownのセグメントに分割する */
+/**
+ * marked.lexer() でトークン分割し、mermaid コードブロックと
+ * 通常 Markdown のセグメントに分ける。
+ * lexer ベースのため CommonMark の各種フェンス形式に対応している。
+ */
 function splitContentSegments(content: string): ContentSegment[] {
+  const tokens = marked.lexer(content);
   const segments: ContentSegment[] = [];
-  MERMAID_FENCE_RE.lastIndex = 0;
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
+  let markdownBuffer = '';
+  let markdownStartIndex = 0;
 
-  while ((match = MERMAID_FENCE_RE.exec(content)) !== null) {
-    if (match.index > lastIndex) {
-      segments.push({
-        type: 'markdown',
-        content: content.slice(lastIndex, match.index),
-        startIndex: lastIndex,
-      });
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i];
+
+    if (token.type === 'code' && token.lang === 'mermaid') {
+      if (markdownBuffer) {
+        segments.push({
+          type: 'markdown',
+          content: markdownBuffer,
+          tokenIndex: markdownStartIndex,
+        });
+        markdownBuffer = '';
+      }
+      segments.push({ type: 'mermaid', code: token.text, tokenIndex: i });
+      markdownStartIndex = i + 1;
+    } else {
+      if (!markdownBuffer) markdownStartIndex = i;
+      markdownBuffer += token.raw;
     }
-    segments.push({ type: 'mermaid', code: match[1], startIndex: match.index });
-    lastIndex = match.index + match[0].length;
   }
 
-  if (lastIndex < content.length) {
+  if (markdownBuffer) {
     segments.push({
       type: 'markdown',
-      content: content.slice(lastIndex),
-      startIndex: lastIndex,
+      content: markdownBuffer,
+      tokenIndex: markdownStartIndex,
     });
   }
 
@@ -68,10 +77,10 @@ const ArticleSection = ({ article, headingIdMap }: ArticleSectionProps) => {
   const segments = splitContentSegments(article.content);
 
   const renderedSegments = segments.map((segment) => {
-    const key = `${segment.type}-${segment.startIndex}`;
+    const key = `${segment.type}-${segment.tokenIndex}`;
 
     if (segment.type === 'mermaid') {
-      return <MermaidBlock key={key} code={segment.code} />;
+      return <MermaidBlockLazy key={key} code={segment.code} />;
     }
 
     const rawHtml = marked.parse(segment.content, {

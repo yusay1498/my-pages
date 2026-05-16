@@ -1,5 +1,6 @@
 'use client';
 
+import DOMPurify from 'isomorphic-dompurify';
 import mermaid from 'mermaid';
 import { useEffect, useId, useState } from 'react';
 
@@ -14,22 +15,6 @@ function extractDiagramType(code: string): string {
   return diagramType || 'Mermaid';
 }
 
-// mermaid は一度だけ初期化する（テーマはシステム設定を参照）
-let mermaidInitialized = false;
-
-function ensureMermaidInitialized(): void {
-  if (mermaidInitialized) return;
-  const isDark =
-    document.documentElement.classList.contains('dark') ||
-    window.matchMedia('(prefers-color-scheme: dark)').matches;
-  mermaid.initialize({
-    startOnLoad: false,
-    securityLevel: 'strict',
-    theme: isDark ? 'dark' : 'default',
-  });
-  mermaidInitialized = true;
-}
-
 const MermaidBlock = ({ code }: MermaidBlockProps) => {
   const [svg, setSvg] = useState<string | null>(null);
   const [hasError, setHasError] = useState(false);
@@ -40,12 +25,27 @@ const MermaidBlock = ({ code }: MermaidBlockProps) => {
   useEffect(() => {
     let cancelled = false;
 
-    ensureMermaidInitialized();
+    // ダークモード判定はレンダリングのたびに行い、テーマ変更に追従させる
+    // mermaid.initialize() は複数回呼んでも安全
+    const isDark =
+      document.documentElement.classList.contains('dark') ||
+      window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: 'strict',
+      theme: isDark ? 'dark' : 'default',
+    });
 
     mermaid
       .render(diagramId, code)
       .then(({ svg: renderedSvg }) => {
-        if (!cancelled) setSvg(renderedSvg);
+        if (cancelled) return;
+        // mermaid の securityLevel:'strict' に加え DOMPurify でも SVG をサニタイズする
+        const safeSvg = DOMPurify.sanitize(renderedSvg, {
+          USE_PROFILES: { svg: true, svgFilters: true },
+        });
+        setSvg(safeSvg);
       })
       .catch((err: unknown) => {
         if (!cancelled) {
