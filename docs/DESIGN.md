@@ -18,6 +18,8 @@
 | スタイリング | Tailwind CSS |
 | 記事形式 | Markdown |
 | Markdown解析 | marked + gray-matter |
+| HTMLサニタイズ | isomorphic-dompurify |
+| ダイアグラム描画 | mermaid.js（Markdown内の mermaid コードブロックを図として表示） |
 | デプロイ | GitHub Actions → GitHub Pages |
 
 ## 3. ディレクトリ構成
@@ -31,12 +33,16 @@ my-pages/
 │   │       └── [slug]/
 │   │           └── page.tsx              # テーマ別ページ
 │   ├── components/                       # 共通UIコンポーネント
+│   │   └── layout/
+│   │       ├── Header.tsx
+│   │       └── Footer.tsx
 │   ├── config/                           # アプリ設定
 │   ├── features/                         # 機能単位のモジュール
 │   │   └── blog/
 │   │       ├── components/
 │   │       │   ├── PostCard.tsx          # テーマカード（一覧用）
-│   │       │   └── ArticleSection.tsx    # 記事セクション（テーマページ用）
+│   │       │   ├── ArticleSection.tsx    # 記事セクション（テーマページ用）
+│   │       │   └── MermaidBlock.tsx      # Mermaidダイアグラム描画（Client Component）
 │   │       ├── lib/
 │   │       │   └── posts.ts             # Markdown読み込み・解析ロジック
 │   │       └── types/
@@ -123,6 +129,13 @@ my-pages/
 - スラッグ: 英数字+ハイフン（内容が分かる名前）
 - フロントマター不要（メタ情報はmeta.jsonで一元管理）
 
+### 対応Markdown記法
+
+| 記法 | 表示 |
+|---|---|
+| 標準Markdown（marked準拠） | テキスト・見出し・リスト・リンク・画像・コードブロック等 |
+| ` ```mermaid ` コードブロック | mermaid.js によるダイアグラム描画（フローチャート、シーケンス図、gitGraph等） |
+
 ## 5. URL設計
 
 | URL | 表示内容 |
@@ -144,6 +157,7 @@ my-pages/
 - 配下のMarkdownを番号順にすべて結合して1ページに表示
 - 記事間にセパレーターを入れる
 - 目次（Table of Contents）を自動生成する
+- Mermaidコードブロックはクライアント側でダイアグラムとして描画する
 
 ## 7. デプロイ
 
