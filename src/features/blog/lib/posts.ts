@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import { z } from 'zod';
 
-import type { Article, Post, PostMeta } from '@/features/blog/types';
+import type { Article, Post, PostMeta, PostSummary } from '@/features/blog/types';
 
 const POSTS_DIR = path.resolve(process.cwd(), 'posts');
 const ARTICLE_FILE_PATTERN = /^(\d+)\.([a-z0-9-]+)\.md$/;
@@ -90,6 +90,21 @@ export const getPostBySlug = (slug: string): Post | null => {
     meta: readPostMeta(postDir),
     articles: readPostArticles(postDir, slug),
   };
+};
+
+export const getAllPostSummaries = (): PostSummary[] => {
+  return getAllPostDirectories()
+    .map((slug) => {
+      const postDir = path.join(POSTS_DIR, slug);
+      const meta = readPostMeta(postDir);
+      if (meta.status !== 'published') {
+        return null;
+      }
+
+      return { slug, meta } satisfies PostSummary;
+    })
+    .filter((summary): summary is PostSummary => summary !== null)
+    .sort((a, b) => b.meta.updatedAt.localeCompare(a.meta.updatedAt));
 };
 
 export const getAllPosts = (): Post[] => {

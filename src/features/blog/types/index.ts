@@ -20,3 +20,8 @@ export type Post = {
   meta: PostMeta;
   articles: Article[];
 };
+
+export type PostSummary = {
+  slug: string;
+  meta: PostMeta;
+};
