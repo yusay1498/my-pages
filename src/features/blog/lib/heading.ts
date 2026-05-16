@@ -20,8 +20,8 @@ export const generateHeadingId = (text: string): string => {
     .replace(/\s+/g, '-')
     .replace(/[^\p{L}\p{N}\-]/gu, '');
 
-  // 非ASCII文字のみエンコードし、英数字とハイフンはそのまま保持する
-  return slug.replace(/[^\w-]/g, (char) => encodeURIComponent(char));
+  // id属性にはUnicodeをそのまま使用し、必要な場合のみリンク側でencodeする
+  return slug;
 };
 
 /**
