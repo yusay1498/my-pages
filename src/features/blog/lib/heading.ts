@@ -1,6 +1,7 @@
 import type { Article, TocItem } from '@/features/blog/types';
 
 const HEADING_PATTERN = /^(#{2,3})\s+(.+)$/gm;
+const DEFAULT_HEADING_SLUG = 'untitled';
 
 /**
  * HTMLタグを除去してプレーンテキストを取得する
@@ -8,6 +9,8 @@ const HEADING_PATTERN = /^(#{2,3})\s+(.+)$/gm;
 const stripHtmlTags = (text: string): string => {
   return text.replace(/<[^>]*>/g, '');
 };
+
+type SlugGenerator = (text: string, articleNumber: number) => string;
 
 /**
  * 見出しテキストからベースのIDスラッグを生成する（日本語対応）
@@ -21,17 +24,13 @@ const generateBaseSlug = (text: string, articleNumber: number): string => {
     .replace(/\s+/g, '-')
     .replace(/[^\p{L}\p{N}\-]/gu, '');
 
-  return `article-${articleNumber}-${slug || 'untitled'}`;
+  return `article-${articleNumber}-${slug || DEFAULT_HEADING_SLUG}`;
 };
 
 /**
  * 同一記事内の重複IDを解決するためのスラッグカウンターを生成する
- * extractTocItems と ArticleSection の renderer で同一インスタンスを使用し整合性を保つ
  */
-export const createSlugCounter = (): ((
-  text: string,
-  articleNumber: number,
-) => string) => {
+export const createSlugCounter = (): SlugGenerator => {
   const counts = new Map<string, number>();
 
   return (text: string, articleNumber: number): string => {
@@ -45,7 +44,7 @@ export const createSlugCounter = (): ((
 
 /**
  * 見出しテキストからIDスラッグを生成する（日本語対応）
- * 重複解決なしの単発利用向け。ToC/renderer間で整合が必要な場合は createSlugCounter を使用する
+ * 重複解決なしの単発利用向け
  */
 export const generateHeadingId = (
   text: string,
@@ -54,15 +53,19 @@ export const generateHeadingId = (
   return generateBaseSlug(text, articleNumber);
 };
 
+type ExtractTocResult = {
+  items: TocItem[];
+  headingIdMap: Map<string, string>;
+};
+
 /**
  * 記事のMarkdownコンテンツから見出し（h2, h3）を抽出してToCアイテムを生成する
- * 返却値の slugCounter を ArticleSection の renderer に渡すことで ID の整合性を保つ
+ * headingIdMap は「articleNumber:見出し出現順」→ IDのマップで、renderer側のID参照に使用する
  */
-export const extractTocItems = (
-  articles: Article[],
-): { items: TocItem[]; slugCounter: (text: string, articleNumber: number) => string } => {
-  const tocSlugCounter = createSlugCounter();
-  const renderSlugCounter = createSlugCounter();
+export const extractTocItems = (articles: Article[]): ExtractTocResult => {
+  const slugCounter = createSlugCounter();
+  const headingIdMap = new Map<string, string>();
+  const headingCounters = new Map<number, number>();
 
   const items = articles.flatMap((article) => {
     const articleItems: TocItem[] = [];
@@ -73,15 +76,17 @@ export const extractTocItems = (
     while ((match = HEADING_PATTERN.exec(article.content)) !== null) {
       const level = match[1].length as 2 | 3;
       const text = match[2].trim();
-      articleItems.push({
-        id: tocSlugCounter(text, article.number),
-        text,
-        level,
-      });
+      const id = slugCounter(text, article.number);
+
+      const idx = headingCounters.get(article.number) ?? 0;
+      headingIdMap.set(`${article.number}:${idx}`, id);
+      headingCounters.set(article.number, idx + 1);
+
+      articleItems.push({ id, text, level });
     }
 
     return articleItems;
   });
 
-  return { items, slugCounter: renderSlugCounter };
+  return { items, headingIdMap };
 };

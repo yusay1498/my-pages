@@ -5,18 +5,20 @@ import type { Article } from '@/features/blog/types';
 
 type ArticleSectionProps = {
   article: Article;
-  slugCounter: (text: string, articleNumber: number) => string;
+  headingIdMap: Map<string, string>;
 };
 
 const ALLOWED_URI_SCHEMES = ['http', 'https', 'mailto'];
 
-const ArticleSection = ({ article, slugCounter }: ArticleSectionProps) => {
+const ArticleSection = ({ article, headingIdMap }: ArticleSectionProps) => {
   const headingId = `article-${article.number}-section`;
+  let headingIndex = 0;
   const renderer = new marked.Renderer();
   renderer.html = () => '';
   renderer.heading = (text: string, level: number) => {
     if (level === 2 || level === 3) {
-      const id = slugCounter(text, article.number);
+      const id = headingIdMap.get(`${article.number}:${headingIndex}`) ?? '';
+      headingIndex++;
       return `<h${level} id="${id}">${text}</h${level}>`;
     }
     return `<h${level}>${text}</h${level}>`;
