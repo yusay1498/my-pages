@@ -1,8 +1,8 @@
 import PostCard from '@/features/blog/components/PostCard';
-import { getAllPosts } from '@/features/blog/lib/posts';
+import { getAllPostSummaries } from '@/features/blog/lib/posts';
 
 const HomePage = () => {
-  const posts = getAllPosts();
+  const posts = getAllPostSummaries();
 
   return (
     <main className="mx-auto w-full max-w-4xl px-4 py-12">

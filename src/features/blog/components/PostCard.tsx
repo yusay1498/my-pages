@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
-import type { Post } from '@/features/blog/types';
+import type { PostSummary } from '@/features/blog/types';
 
 type Props = {
-  post: Post;
+  post: PostSummary;
 };
 
 const PostCard = ({ post }: Props) => {
