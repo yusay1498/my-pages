@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Fragment } from 'react';
 
@@ -17,11 +18,25 @@ export async function generateStaticParams() {
     : [{ slug: PLACEHOLDER_SLUG }];
 }
 
-export default async function PostPage({
+type PageParams = { params: Promise<{ slug: string }> };
+
+export async function generateMetadata({
   params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+}: PageParams): Promise<Metadata> {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
+
+  if (!post || post.meta.status !== 'published') {
+    return { title: 'Not Found' };
+  }
+
+  return {
+    title: post.meta.title,
+    description: post.meta.description,
+  };
+}
+
+export default async function PostPage({ params }: PageParams) {
   const { slug } = await params;
   const post = getPostBySlug(slug);
 

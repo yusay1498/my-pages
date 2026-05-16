@@ -31,7 +31,10 @@ const readPostMeta = (postDir: string): PostMeta => {
   return postMetaSchema.parse(JSON.parse(rawMeta));
 };
 
-const readPostArticles = (postDir: string, slug: string): Article[] => {
+const readPostArticles = (
+  postDir: string,
+  slug: string,
+): readonly Article[] => {
   return readdirSync(postDir)
     .filter((filename) => filename.endsWith('.md'))
     .map((filename) => {
@@ -114,7 +117,7 @@ export const getAllPostSummaries = (): PostSummary[] => {
 
 export const getAllPosts = (): Post[] => {
   return getAllPostDirectories()
-    .map((slug) => {
+    .map((slug): Post | null => {
       const postDir = path.join(POSTS_DIR, slug);
       const meta = readPostMeta(postDir);
       if (meta.status !== 'published') {
@@ -125,7 +128,7 @@ export const getAllPosts = (): Post[] => {
         slug,
         meta,
         articles: readPostArticles(postDir, slug),
-      } satisfies Post;
+      };
     })
     .filter((post): post is Post => post !== null)
     .sort((a, b) => b.meta.updatedAt.localeCompare(a.meta.updatedAt));

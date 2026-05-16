@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { ReactNode } from 'react';
 
 import { AppProvider } from '@/app/provider';
@@ -6,7 +7,7 @@ import { Header } from '@/components/layout/Header';
 
 import '@/styles/globals.css';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Yusay's TIL",
   description: '個人の学習アウトプットブログ',
 };

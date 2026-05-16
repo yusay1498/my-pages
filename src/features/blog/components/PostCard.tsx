@@ -1,20 +1,18 @@
 import Link from 'next/link';
 
+import { paths } from '@/config/paths';
 import type { PostSummary } from '@/features/blog/types';
 
-type Props = {
-  post: PostSummary;
+type PostCardProps = {
+  readonly post: PostSummary;
 };
 
-const PostCard = ({ post }: Props) => {
+const PostCard = ({ post }: PostCardProps) => {
   const updatedAtDisplay = post.meta.updatedAt.replaceAll('-', '/');
 
   return (
     <article className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
-      <Link
-        href={`/posts/${encodeURIComponent(post.slug)}`}
-        className="group block"
-      >
+      <Link href={paths.post.getHref(post.slug)} className="group block">
         <h2 className="text-xl font-bold tracking-tight text-gray-900 group-hover:text-blue-600 dark:text-gray-100 dark:group-hover:text-blue-400">
           {post.meta.title}
         </h2>

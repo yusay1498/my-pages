@@ -60,7 +60,9 @@ type ExtractTocResult = {
  * 記事のMarkdownコンテンツから見出し（h2, h3）を抽出してToCアイテムを生成する
  * headingIdMap は「articleNumber:見出し出現順」→ IDのマップで、renderer側のID参照に使用する
  */
-export const extractTocItems = (articles: Article[]): ExtractTocResult => {
+export const extractTocItems = (
+  articles: readonly Article[],
+): ExtractTocResult => {
   const slugCounter = createSlugCounter();
   const headingIdMap = new Map<string, string>();
   const headingCounters = new Map<number, number>();
