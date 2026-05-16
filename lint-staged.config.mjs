@@ -1,10 +1,10 @@
 import path from 'path';
 
 const buildEslintCommand = (filenames) => {
-  return `next lint --fix --file ${filenames
+  return `eslint --fix ${filenames
     .filter((f) => f.includes('/src/'))
     .map((f) => path.relative(process.cwd(), f))
-    .join(' --file ')}`;
+    .join(' ')}`;
 };
 
 const config = {
