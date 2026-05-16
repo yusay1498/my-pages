@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import { Fragment } from 'react';
 
 import ArticleSection from '@/features/blog/components/ArticleSection';
+import TableOfContents from '@/features/blog/components/TableOfContents';
+import { extractTocItems } from '@/features/blog/lib/heading';
 import { getAllSlugs, getPostBySlug } from '@/features/blog/lib/posts';
 
 export const dynamicParams = false;
@@ -52,6 +54,8 @@ export default async function PostPage({
           更新日: <time dateTime={post.meta.updatedAt}>{updatedAtDisplay}</time>
         </p>
       </header>
+
+      <TableOfContents items={extractTocItems(post.articles)} />
 
       <div className="space-y-8">
         {post.articles.map((article, index) => (

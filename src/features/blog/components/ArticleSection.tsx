@@ -1,6 +1,7 @@
 import DOMPurify from 'isomorphic-dompurify';
 import { marked } from 'marked';
 
+import { generateHeadingId } from '@/features/blog/lib/heading';
 import type { Article } from '@/features/blog/types';
 
 type ArticleSectionProps = {
@@ -13,6 +14,13 @@ const ArticleSection = ({ article }: ArticleSectionProps) => {
   const headingId = `article-${article.number}-heading`;
   const renderer = new marked.Renderer();
   renderer.html = () => '';
+  renderer.heading = (text: string, level: number) => {
+    if (level === 2 || level === 3) {
+      const id = generateHeadingId(text);
+      return `<h${level} id="${id}">${text}</h${level}>`;
+    }
+    return `<h${level}>${text}</h${level}>`;
+  };
   const rawHtml = marked.parse(article.content, {
     async: false,
     renderer,

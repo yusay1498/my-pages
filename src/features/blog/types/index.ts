@@ -25,3 +25,9 @@ export type PostSummary = {
   slug: string;
   meta: PostMeta;
 };
+
+export type TocItem = {
+  id: string;
+  text: string;
+  level: 2 | 3;
+};
