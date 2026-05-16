@@ -3,12 +3,19 @@ import type { Article, TocItem } from '@/features/blog/types';
 const HEADING_PATTERN = /^(#{2,3})\s+(.+)$/gm;
 
 /**
+ * HTMLタグを除去してプレーンテキストを取得する
+ */
+const stripHtmlTags = (text: string): string => {
+  return text.replace(/<[^>]*>/g, '');
+};
+
+/**
  * 見出しテキストからIDスラッグを生成する（日本語対応）
- * encodeURIComponentを使い、日本語文字はパーセントエンコーディングされる
  */
 export const generateHeadingId = (text: string): string => {
+  const plainText = stripHtmlTags(text);
   return encodeURIComponent(
-    text
+    plainText
       .trim()
       .toLowerCase()
       .replace(/\s+/g, '-')
