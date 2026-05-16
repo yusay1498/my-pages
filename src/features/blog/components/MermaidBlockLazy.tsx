@@ -6,6 +6,9 @@ import dynamic from 'next/dynamic';
 // ssr: false で遅延読み込みし、mermaid を含まないページのバンドルを削減する
 const MermaidBlockLazy = dynamic(() => import('./MermaidBlock'), {
   ssr: false,
+  loading: () => (
+    <div className="animate-pulse rounded bg-gray-100 p-8 dark:bg-gray-800" />
+  ),
 });
 
 export default MermaidBlockLazy;

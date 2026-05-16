@@ -24,13 +24,14 @@ const ALLOWED_URI_SCHEMES = ['http', 'https', 'mailto'];
 function splitContentSegments(content: string): ContentSegment[] {
   const tokens = marked.lexer(content);
   const segments: ContentSegment[] = [];
+  // mermaid ブロック以外の連続するトークンを一時的に溜めるバッファ
   let markdownBuffer = '';
+  // 現バッファの先頭トークンのインデックス（Reactキー生成に使用）
   let markdownStartIndex = 0;
 
-  for (let i = 0; i < tokens.length; i++) {
-    const token = tokens[i];
-
+  for (const [i, token] of tokens.entries()) {
     if (token.type === 'code' && token.lang === 'mermaid') {
+      // mermaid ブロックに到達したらバッファをフラッシュしてセグメント化
       if (markdownBuffer) {
         segments.push({
           type: 'markdown',
@@ -42,11 +43,13 @@ function splitContentSegments(content: string): ContentSegment[] {
       segments.push({ type: 'mermaid', code: token.text, tokenIndex: i });
       markdownStartIndex = i + 1;
     } else {
+      // 通常 Markdown トークン: raw テキストをバッファに蓄積
       if (!markdownBuffer) markdownStartIndex = i;
       markdownBuffer += token.raw;
     }
   }
 
+  // 末尾に残ったバッファをセグメント化
   if (markdownBuffer) {
     segments.push({
       type: 'markdown',
