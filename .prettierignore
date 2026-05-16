@@ -1,1 +1,4 @@
 *.hbs
+
+# Tailwind v4のカスタムディレクティブ(@plugin/@theme/@utility)はPrettierのCSSパーサーが未対応
+src/styles/globals.css
