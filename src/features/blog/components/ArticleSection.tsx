@@ -19,10 +19,7 @@ const ArticleSection = ({ article }: ArticleSectionProps) => {
   }) as string;
 
   const html = DOMPurify.sanitize(rawHtml, {
-    ALLOWED_URI_REGEXP: new RegExp(
-      `^(${ALLOWED_URI_SCHEMES.join('|')}):`,
-      'i',
-    ),
+    ALLOWED_URI_REGEXP: new RegExp(`^(${ALLOWED_URI_SCHEMES.join('|')}):`, 'i'),
   });
 
   return (
