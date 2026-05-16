@@ -32,6 +32,8 @@ npm run dev
 
 ## ディレクトリ構成
 
+[bulletproof-react](https://github.com/alan2207/bulletproof-react) を参考に、feature ベースのディレクトリ構成を採用しています。
+
 ```
 src/
 ├── app/          # Next.js App Router（ページ・レイアウト）
@@ -42,6 +44,8 @@ src/
 └── utils/        # ユーティリティ関数
 posts/            # Markdown 記事データ
 ```
+
+詳細な設計方針は [docs/DESIGN.md](./docs/DESIGN.md) を参照してください。
 
 ## 記事の追加方法
 
