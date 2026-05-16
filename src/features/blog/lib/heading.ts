@@ -10,8 +10,6 @@ const stripHtmlTags = (text: string): string => {
   return text.replace(/<[^>]*>/g, '');
 };
 
-type SlugGenerator = (text: string, articleNumber: number) => string;
-
 /**
  * 見出しテキストからベースのIDスラッグを生成する（日本語対応）
  * articleNumber を付与して記事間の見出し重複を回避する
@@ -22,7 +20,7 @@ const generateBaseSlug = (text: string, articleNumber: number): string => {
     .trim()
     .toLowerCase()
     .replace(/\s+/g, '-')
-    .replace(/[^\p{L}\p{N}\-]/gu, '');
+    .replace(/[^\p{L}\p{N}-]/gu, '');
 
   return `article-${articleNumber}-${slug || DEFAULT_HEADING_SLUG}`;
 };
@@ -30,7 +28,7 @@ const generateBaseSlug = (text: string, articleNumber: number): string => {
 /**
  * 同一記事内の重複IDを解決するためのスラッグカウンターを生成する
  */
-export const createSlugCounter = (): SlugGenerator => {
+export const createSlugCounter = () => {
   const counts = new Map<string, number>();
 
   return (text: string, articleNumber: number): string => {

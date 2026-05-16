@@ -61,7 +61,10 @@ export default async function PostPage({
       <div className="space-y-8">
         {post.articles.map((article, index) => (
           <Fragment key={article.filename}>
-            <ArticleSection article={article} headingIdMap={tocData.headingIdMap} />
+            <ArticleSection
+              article={article}
+              headingIdMap={tocData.headingIdMap}
+            />
             {index < post.articles.length - 1 ? (
               <hr className="border-gray-200 dark:border-gray-700" />
             ) : null}
