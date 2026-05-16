@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import { Fragment } from 'react';
 
 import ArticleSection from '@/features/blog/components/ArticleSection';
+import TableOfContents from '@/features/blog/components/TableOfContents';
+import { extractTocItems } from '@/features/blog/lib/heading';
 import { getAllSlugs, getPostBySlug } from '@/features/blog/lib/posts';
 
 export const dynamicParams = false;
@@ -28,6 +30,7 @@ export default async function PostPage({
   }
 
   const updatedAtDisplay = post.meta.updatedAt.replaceAll('-', '/');
+  const tocData = extractTocItems(post.articles);
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-12">
@@ -53,10 +56,15 @@ export default async function PostPage({
         </p>
       </header>
 
+      <TableOfContents items={tocData.items} />
+
       <div className="space-y-8">
         {post.articles.map((article, index) => (
           <Fragment key={article.filename}>
-            <ArticleSection article={article} />
+            <ArticleSection
+              article={article}
+              headingIdMap={tocData.headingIdMap}
+            />
             {index < post.articles.length - 1 ? (
               <hr className="border-gray-200 dark:border-gray-700" />
             ) : null}

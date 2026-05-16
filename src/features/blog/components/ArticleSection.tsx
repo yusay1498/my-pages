@@ -1,18 +1,31 @@
 import DOMPurify from 'isomorphic-dompurify';
 import { marked } from 'marked';
 
+import { generateHeadingId } from '@/features/blog/lib/heading';
 import type { Article } from '@/features/blog/types';
 
 type ArticleSectionProps = {
   article: Article;
+  headingIdMap: Map<string, string>;
 };
 
 const ALLOWED_URI_SCHEMES = ['http', 'https', 'mailto'];
 
-const ArticleSection = ({ article }: ArticleSectionProps) => {
-  const headingId = `article-${article.number}-heading`;
+const ArticleSection = ({ article, headingIdMap }: ArticleSectionProps) => {
+  const headingId = `article-${article.number}-section`;
+  let headingIndex = 0;
   const renderer = new marked.Renderer();
   renderer.html = () => '';
+  renderer.heading = (text: string, level: number) => {
+    if (level === 2 || level === 3) {
+      const id =
+        headingIdMap.get(`${article.number}:${headingIndex}`) ??
+        generateHeadingId(text, article.number);
+      headingIndex++;
+      return `<h${level} id="${id}">${text}</h${level}>`;
+    }
+    return `<h${level}>${text}</h${level}>`;
+  };
   const rawHtml = marked.parse(article.content, {
     async: false,
     renderer,
