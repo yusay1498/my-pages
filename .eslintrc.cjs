@@ -5,11 +5,7 @@ module.exports = {
     es6: true,
   },
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-  ignorePatterns: [
-    'node_modules/*',
-    'public/mockServiceWorker.js',
-    'generators/*',
-  ],
+  ignorePatterns: ['node_modules/*'],
   extends: ['eslint:recommended', 'next/core-web-vitals'],
   overrides: [
     {
@@ -36,10 +32,7 @@ module.exports = {
         'plugin:react-hooks/recommended',
         'plugin:jsx-a11y/recommended',
         'plugin:prettier/recommended',
-        'plugin:testing-library/react',
-        'plugin:jest-dom/recommended',
         'plugin:tailwindcss/recommended',
-        'plugin:vitest/legacy-recommended',
       ],
       rules: {
         '@next/next/no-img-element': 'off',
@@ -47,41 +40,6 @@ module.exports = {
           'error',
           {
             zones: [
-              // disables cross-feature imports:
-              // eg. src/features/discussions should not import from src/features/comments, etc.
-              {
-                target: './src/features/auth',
-                from: './src/features',
-                except: ['./auth'],
-              },
-              {
-                target: './src/features/comments',
-                from: './src/features',
-                except: ['./comments'],
-              },
-              {
-                target: './src/features/discussions',
-                from: './src/features',
-                except: ['./discussions'],
-              },
-              {
-                target: './src/features/teams',
-                from: './src/features',
-                except: ['./teams'],
-              },
-              {
-                target: './src/features/users',
-                from: './src/features',
-                except: ['./users'],
-              },
-              // enforce unidirectional codebase:
-
-              // e.g. src/app can import from src/features but not the other way around
-              {
-                target: './src/features',
-                from: './src/app',
-              },
-
               // e.g src/features and src/app can import from these shared modules but not the other way around
               {
                 target: [
@@ -126,28 +84,6 @@ module.exports = {
         '@typescript-eslint/no-empty-function': ['off'],
         '@typescript-eslint/no-explicit-any': ['off'],
         'prettier/prettier': ['error', {}, { usePrettierrc: true }],
-      },
-    },
-    {
-      plugins: ['check-file'],
-      files: ['src/**/*'],
-      rules: {
-        'check-file/filename-naming-convention': [
-          'error',
-          {
-            '**/*.{ts,tsx}': 'KEBAB_CASE',
-          },
-          {
-            ignoreMiddleExtensions: true,
-          },
-        ],
-        'check-file/folder-naming-convention': [
-          'error',
-          {
-            '!(src/app)/**/*': 'KEBAB_CASE',
-            '!(**/__tests__)/**/*': 'KEBAB_CASE',
-          },
-        ],
       },
     },
   ],
