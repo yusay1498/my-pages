@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
 
 import { AppProvider } from '@/app/provider';
+import { Footer } from '@/components/layout/Footer';
+import { Header } from '@/components/layout/Header';
 
 import '@/styles/globals.css';
 
@@ -12,8 +14,12 @@ export const metadata = {
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html lang="ja">
-      <body>
-        <AppProvider>{children}</AppProvider>
+      <body className="flex min-h-screen flex-col">
+        <AppProvider>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </AppProvider>
       </body>
     </html>
   );
