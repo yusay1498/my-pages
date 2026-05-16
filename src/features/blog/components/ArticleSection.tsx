@@ -7,17 +7,26 @@ type ArticleSectionProps = {
 };
 
 const ArticleSection = ({ article }: ArticleSectionProps) => {
-  const html = marked.parse(article.content, { async: false }) as string;
+  const headingId = `article-${article.number}-heading`;
+  const renderer = new marked.Renderer();
+  renderer.html = () => '';
+  const html = marked.parse(article.content, {
+    async: false,
+    renderer,
+  }) as string;
 
   return (
-    <section aria-label={`article-${article.number}`}>
-      <h2 className="mb-4 text-2xl font-semibold text-gray-900">
-        {article.number}
+    <article aria-labelledby={headingId}>
+      <h2
+        id={headingId}
+        className="mb-4 text-2xl font-semibold text-gray-900 dark:text-gray-100"
+      >
+        第{article.number}節
       </h2>
       <div className="prose prose-gray dark:prose-invert max-w-none">
         <div dangerouslySetInnerHTML={{ __html: html }} />
       </div>
-    </section>
+    </article>
   );
 };
 
