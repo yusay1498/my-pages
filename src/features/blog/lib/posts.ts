@@ -128,7 +128,7 @@ export const getAllPosts = (): Post[] => {
         slug,
         meta,
         articles: readPostArticles(postDir, slug),
-      };
+      } satisfies Post;
     })
     .filter((post): post is Post => post !== null)
     .sort((a, b) => b.meta.updatedAt.localeCompare(a.meta.updatedAt));

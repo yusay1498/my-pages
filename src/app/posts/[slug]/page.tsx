@@ -27,7 +27,7 @@ export async function generateMetadata({
   const post = getPostBySlug(slug);
 
   if (!post || post.meta.status !== 'published') {
-    return { title: 'Not Found' };
+    notFound();
   }
 
   return {

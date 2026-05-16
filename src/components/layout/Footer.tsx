@@ -1,4 +1,4 @@
-/** 現在の年はビルド時に確定するため Server Component で十分 */
+/** 現在の年はビルド時（static export）に確定する */
 const CURRENT_YEAR = new Date().getFullYear();
 
 export const Footer = () => {
