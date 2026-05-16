@@ -7,6 +7,13 @@ type MermaidBlockProps = {
   readonly code: string;
 };
 
+/** mermaidコードの1行目からダイアグラム種別を抽出する（例: "flowchart LR" → "flowchart"） */
+function extractDiagramType(code: string): string {
+  const firstLine = code.trim().split('\n')[0]?.trim() ?? '';
+  const diagramType = firstLine.split(/\s+/)[0] ?? '';
+  return diagramType || 'Mermaid';
+}
+
 // mermaid は一度だけ初期化する（テーマはシステム設定を参照）
 let mermaidInitialized = false;
 
@@ -54,7 +61,11 @@ const MermaidBlock = ({ code }: MermaidBlockProps) => {
 
   if (hasError) {
     return (
-      <pre className="rounded bg-gray-100 p-4 text-sm text-red-600 dark:bg-gray-800 dark:text-red-400">
+      <pre
+        role="alert"
+        aria-label="ダイアグラムの描画に失敗しました"
+        className="rounded bg-gray-100 p-4 text-sm text-red-600 dark:bg-gray-800 dark:text-red-400"
+      >
         {code}
       </pre>
     );
@@ -68,10 +79,12 @@ const MermaidBlock = ({ code }: MermaidBlockProps) => {
     );
   }
 
+  const diagramType = extractDiagramType(code);
+
   return (
     <div
       role="img"
-      aria-label="Mermaidダイアグラム"
+      aria-label={`${diagramType} ダイアグラム`}
       className="my-4 overflow-x-auto"
       dangerouslySetInnerHTML={{ __html: svg }}
     />

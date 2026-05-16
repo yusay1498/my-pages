@@ -17,7 +17,7 @@ type ContentSegment =
 const ALLOWED_URI_SCHEMES = ['http', 'https', 'mailto'];
 
 // mermaidコードフェンスのパターン（gフラグ付きはlastIndexを持つため関数内でリセットが必要）
-const MERMAID_FENCE_RE = /^```mermaid\r?\n([\s\S]*?)\n```$/gm;
+const MERMAID_FENCE_RE = /^```mermaid\s*\r?\n([\s\S]*?)\n\s*```$/gm;
 
 /** Markdownコンテンツをmermaidブロックと通常Markdownのセグメントに分割する */
 function splitContentSegments(content: string): ContentSegment[] {
