@@ -3,7 +3,12 @@ import path from 'node:path';
 
 import { z } from 'zod';
 
-import type { Article, Post, PostMeta, PostSummary } from '@/features/blog/types';
+import type {
+  Article,
+  Post,
+  PostMeta,
+  PostSummary,
+} from '@/features/blog/types';
 
 const POSTS_DIR = path.resolve(process.cwd(), 'posts');
 const ARTICLE_FILE_PATTERN = /^(\d+)\.([a-z0-9-]+)\.md$/;

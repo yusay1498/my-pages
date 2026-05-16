@@ -11,7 +11,10 @@ const PostCard = ({ post }: Props) => {
 
   return (
     <article className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
-      <Link href={`/posts/${encodeURIComponent(post.slug)}`} className="group block">
+      <Link
+        href={`/posts/${encodeURIComponent(post.slug)}`}
+        className="group block"
+      >
         <h2 className="text-xl font-bold tracking-tight text-gray-900 group-hover:text-blue-600 dark:text-gray-100 dark:group-hover:text-blue-400">
           {post.meta.title}
         </h2>
