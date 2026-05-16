@@ -29,7 +29,7 @@ function buildUrlWithParams(
 }
 
 // Create a separate function for getting server-side cookies that can be imported where needed
-export async function getServerCookies() {
+export async function getServerCookies(): Promise<string> {
   if (typeof window !== 'undefined') return '';
 
   // Dynamic import next/headers only on server-side
