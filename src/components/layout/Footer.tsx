@@ -11,6 +11,7 @@ export const Footer = () => {
           href="https://github.com/yusay1498/my-pages"
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="GitHubリポジトリ（新しいウィンドウで開く）"
           className="text-sm text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
         >
           GitHub
