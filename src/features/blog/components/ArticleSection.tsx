@@ -30,7 +30,7 @@ const ArticleSection = ({ article }: ArticleSectionProps) => {
       >
         第{article.number}節
       </h2>
-      <div className="prose prose-gray dark:prose-invert max-w-none">
+      <div className="prose max-w-none prose-gray dark:prose-invert">
         <div dangerouslySetInnerHTML={{ __html: html }} />
       </div>
     </article>

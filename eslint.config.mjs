@@ -3,6 +3,10 @@ import tsPlugin from '@typescript-eslint/eslint-plugin';
 import nextConfig from 'eslint-config-next/core-web-vitals';
 import prettierPlugin from 'eslint-plugin-prettier/recommended';
 import tailwindcssPlugin from 'eslint-plugin-tailwindcss';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default [
   { ignores: ['node_modules/*'] },
@@ -13,6 +17,15 @@ export default [
   tsPlugin.configs['flat/eslint-recommended'],
   // Tailwind CSS flat config
   ...tailwindcssPlugin.configs['flat/recommended'],
+  // eslint-plugin-tailwindcss にv4のCSSベース設定を指示
+  {
+    settings: {
+      tailwindcss: {
+        // Tailwind v4: CSS ファイルの絶対パスを config に指定
+        config: path.resolve(__dirname, 'src/styles/globals.css'),
+      },
+    },
+  },
   // Prettier flat config (must come after other style rules)
   prettierPlugin,
   // Custom rules for TypeScript/TSX files
