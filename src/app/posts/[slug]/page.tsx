@@ -28,7 +28,6 @@ export default async function PostPage({
   }
 
   const updatedAtDisplay = post.meta.updatedAt.replaceAll('-', '/');
-  const updatedAtDateTime = `${post.meta.updatedAt}T00:00:00Z`;
 
   return (
     <main className="mx-auto w-full max-w-4xl px-4 py-12">
@@ -50,7 +49,7 @@ export default async function PostPage({
           ))}
         </ul>
         <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-          更新日: <time dateTime={updatedAtDateTime}>{updatedAtDisplay}</time>
+          更新日: <time dateTime={post.meta.updatedAt}>{updatedAtDisplay}</time>
         </p>
       </header>
 
