@@ -22,7 +22,7 @@ import { cn } from '@/utils/cn';
 type SideNavigationItem = {
   name: string;
   to: string;
-  icon: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
+  icon: (props: React.SVGProps<SVGSVGElement>) => React.ReactElement;
 };
 
 const Logo = () => {
@@ -165,8 +165,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-function Fallback({ error }: { error: Error }) {
-  return <p>Error: {error.message ?? 'Something went wrong!'}</p>;
+function Fallback({ error }: { error: unknown }) {
+  const message = error instanceof Error ? error.message : 'Something went wrong!';
+  return <p>Error: {message}</p>;
 }
 
 export const DashboardLayout = ({

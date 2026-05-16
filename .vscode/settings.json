@@ -2,5 +2,11 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
+  },
+  "css.lint.unknownAtRules": "ignore",
+  "files.insertFinalNewline": true,
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": false
   }
 }
