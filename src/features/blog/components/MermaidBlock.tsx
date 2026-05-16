@@ -7,6 +7,22 @@ type MermaidBlockProps = {
   readonly code: string;
 };
 
+// mermaid は一度だけ初期化する（テーマはシステム設定を参照）
+let mermaidInitialized = false;
+
+function ensureMermaidInitialized(): void {
+  if (mermaidInitialized) return;
+  const isDark =
+    document.documentElement.classList.contains('dark') ||
+    window.matchMedia('(prefers-color-scheme: dark)').matches;
+  mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: 'strict',
+    theme: isDark ? 'dark' : 'default',
+  });
+  mermaidInitialized = true;
+}
+
 const MermaidBlock = ({ code }: MermaidBlockProps) => {
   const [svg, setSvg] = useState<string | null>(null);
   const [hasError, setHasError] = useState(false);
@@ -15,25 +31,25 @@ const MermaidBlock = ({ code }: MermaidBlockProps) => {
   const diagramId = `mermaid-${id.replace(/:/g, '')}`;
 
   useEffect(() => {
-    const isDark =
-      document.documentElement.classList.contains('dark') ||
-      window.matchMedia('(prefers-color-scheme: dark)').matches;
+    let cancelled = false;
 
-    mermaid.initialize({
-      startOnLoad: false,
-      securityLevel: 'strict',
-      theme: isDark ? 'dark' : 'default',
-    });
+    ensureMermaidInitialized();
 
     mermaid
       .render(diagramId, code)
       .then(({ svg: renderedSvg }) => {
-        setSvg(renderedSvg);
+        if (!cancelled) setSvg(renderedSvg);
       })
       .catch((err: unknown) => {
-        console.error('Mermaid rendering failed:', err);
-        setHasError(true);
+        if (!cancelled) {
+          console.error('Mermaid rendering failed:', err);
+          setHasError(true);
+        }
       });
+
+    return () => {
+      cancelled = true;
+    };
   }, [code, diagramId]);
 
   if (hasError) {
@@ -54,6 +70,8 @@ const MermaidBlock = ({ code }: MermaidBlockProps) => {
 
   return (
     <div
+      role="img"
+      aria-label="Mermaidダイアグラム"
       className="my-4 overflow-x-auto"
       dangerouslySetInnerHTML={{ __html: svg }}
     />

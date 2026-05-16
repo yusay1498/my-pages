@@ -11,15 +11,18 @@ type ArticleSectionProps = {
 };
 
 type ContentSegment =
-  | { type: 'markdown'; content: string }
-  | { type: 'mermaid'; code: string };
+  | { type: 'markdown'; content: string; startIndex: number }
+  | { type: 'mermaid'; code: string; startIndex: number };
 
 const ALLOWED_URI_SCHEMES = ['http', 'https', 'mailto'];
+
+// mermaidコードフェンスのパターン（gフラグ付きはlastIndexを持つため関数内でリセットが必要）
+const MERMAID_FENCE_RE = /^```mermaid\r?\n([\s\S]*?)\n```$/gm;
 
 /** Markdownコンテンツをmermaidブロックと通常Markdownのセグメントに分割する */
 function splitContentSegments(content: string): ContentSegment[] {
   const segments: ContentSegment[] = [];
-  const MERMAID_FENCE_RE = /^```mermaid\r?\n([\s\S]*?)\n```$/gm;
+  MERMAID_FENCE_RE.lastIndex = 0;
   let lastIndex = 0;
   let match: RegExpExecArray | null;
 
@@ -28,14 +31,19 @@ function splitContentSegments(content: string): ContentSegment[] {
       segments.push({
         type: 'markdown',
         content: content.slice(lastIndex, match.index),
+        startIndex: lastIndex,
       });
     }
-    segments.push({ type: 'mermaid', code: match[1] });
+    segments.push({ type: 'mermaid', code: match[1], startIndex: match.index });
     lastIndex = match.index + match[0].length;
   }
 
   if (lastIndex < content.length) {
-    segments.push({ type: 'markdown', content: content.slice(lastIndex) });
+    segments.push({
+      type: 'markdown',
+      content: content.slice(lastIndex),
+      startIndex: lastIndex,
+    });
   }
 
   return segments;
@@ -59,9 +67,11 @@ const ArticleSection = ({ article, headingIdMap }: ArticleSectionProps) => {
 
   const segments = splitContentSegments(article.content);
 
-  const renderedSegments = segments.map((segment, i) => {
+  const renderedSegments = segments.map((segment) => {
+    const key = `${segment.type}-${segment.startIndex}`;
+
     if (segment.type === 'mermaid') {
-      return <MermaidBlock key={i} code={segment.code} />;
+      return <MermaidBlock key={key} code={segment.code} />;
     }
 
     const rawHtml = marked.parse(segment.content, {
@@ -76,7 +86,7 @@ const ArticleSection = ({ article, headingIdMap }: ArticleSectionProps) => {
       ),
     });
 
-    return <div key={i} dangerouslySetInnerHTML={{ __html: html }} />;
+    return <div key={key} dangerouslySetInnerHTML={{ __html: html }} />;
   });
 
   return (
