@@ -3,14 +3,5 @@
   "trailingComma": "all",
   "printWidth": 80,
   "tabWidth": 2,
-  "useTabs": false,
-  "overrides": [
-    {
-      "files": "src/styles/globals.css",
-      "options": {
-        "parser": "css"
-      },
-      "excludeFiles": "src/styles/globals.css"
-    }
-  ]
+  "useTabs": false
 }
