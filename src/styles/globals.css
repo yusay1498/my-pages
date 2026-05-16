@@ -154,8 +154,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-html {
-  scroll-behavior: smooth;
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 /* 目次のアンカーリンク先にスクロールマージンを付与 */

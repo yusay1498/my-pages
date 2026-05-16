@@ -16,7 +16,7 @@ const ArticleSection = ({ article }: ArticleSectionProps) => {
   renderer.html = () => '';
   renderer.heading = (text: string, level: number) => {
     if (level === 2 || level === 3) {
-      const id = generateHeadingId(text);
+      const id = generateHeadingId(text, article.number);
       return `<h${level} id="${id}">${text}</h${level}>`;
     }
     return `<h${level}>${text}</h${level}>`;

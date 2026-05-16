@@ -11,8 +11,12 @@ const stripHtmlTags = (text: string): string => {
 
 /**
  * 見出しテキストからIDスラッグを生成する（日本語対応）
+ * articleNumber を付与して記事間の見出し重複を回避する
  */
-export const generateHeadingId = (text: string): string => {
+export const generateHeadingId = (
+  text: string,
+  articleNumber: number,
+): string => {
   const plainText = stripHtmlTags(text);
   const slug = plainText
     .trim()
@@ -20,8 +24,7 @@ export const generateHeadingId = (text: string): string => {
     .replace(/\s+/g, '-')
     .replace(/[^\p{L}\p{N}\-]/gu, '');
 
-  // id属性にはUnicodeをそのまま使用し、必要な場合のみリンク側でencodeする
-  return slug;
+  return `article-${articleNumber}-${slug}`;
 };
 
 /**
@@ -39,7 +42,7 @@ export const extractTocItems = (articles: Article[]): TocItem[] => {
       const level = match[1].length as 2 | 3;
       const text = match[2].trim();
       items.push({
-        id: generateHeadingId(text),
+        id: generateHeadingId(text, article.number),
         text,
         level,
       });
