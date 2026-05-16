@@ -1,6 +1,7 @@
 import DOMPurify from 'isomorphic-dompurify';
 import { marked } from 'marked';
 
+import MermaidBlock from '@/features/blog/components/MermaidBlock';
 import { generateHeadingId } from '@/features/blog/lib/heading';
 import type { Article } from '@/features/blog/types';
 
@@ -9,7 +10,36 @@ type ArticleSectionProps = {
   headingIdMap: Map<string, string>;
 };
 
+type ContentSegment =
+  | { type: 'markdown'; content: string }
+  | { type: 'mermaid'; code: string };
+
 const ALLOWED_URI_SCHEMES = ['http', 'https', 'mailto'];
+
+/** Markdownコンテンツをmermaidブロックと通常Markdownのセグメントに分割する */
+function splitContentSegments(content: string): ContentSegment[] {
+  const segments: ContentSegment[] = [];
+  const MERMAID_FENCE_RE = /^```mermaid\r?\n([\s\S]*?)\n```$/gm;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = MERMAID_FENCE_RE.exec(content)) !== null) {
+    if (match.index > lastIndex) {
+      segments.push({
+        type: 'markdown',
+        content: content.slice(lastIndex, match.index),
+      });
+    }
+    segments.push({ type: 'mermaid', code: match[1] });
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < content.length) {
+    segments.push({ type: 'markdown', content: content.slice(lastIndex) });
+  }
+
+  return segments;
+}
 
 const ArticleSection = ({ article, headingIdMap }: ArticleSectionProps) => {
   const headingId = `article-${article.number}-section`;
@@ -26,13 +56,27 @@ const ArticleSection = ({ article, headingIdMap }: ArticleSectionProps) => {
     }
     return `<h${level}>${text}</h${level}>`;
   };
-  const rawHtml = marked.parse(article.content, {
-    async: false,
-    renderer,
-  }) as string;
 
-  const html = DOMPurify.sanitize(rawHtml, {
-    ALLOWED_URI_REGEXP: new RegExp(`^(${ALLOWED_URI_SCHEMES.join('|')}):`, 'i'),
+  const segments = splitContentSegments(article.content);
+
+  const renderedSegments = segments.map((segment, i) => {
+    if (segment.type === 'mermaid') {
+      return <MermaidBlock key={i} code={segment.code} />;
+    }
+
+    const rawHtml = marked.parse(segment.content, {
+      async: false,
+      renderer,
+    }) as string;
+
+    const html = DOMPurify.sanitize(rawHtml, {
+      ALLOWED_URI_REGEXP: new RegExp(
+        `^(${ALLOWED_URI_SCHEMES.join('|')}):`,
+        'i',
+      ),
+    });
+
+    return <div key={i} dangerouslySetInnerHTML={{ __html: html }} />;
   });
 
   return (
@@ -44,7 +88,7 @@ const ArticleSection = ({ article, headingIdMap }: ArticleSectionProps) => {
         第{article.number}節
       </h2>
       <div className="prose max-w-none prose-gray dark:prose-invert">
-        <div dangerouslySetInnerHTML={{ __html: html }} />
+        {renderedSegments}
       </div>
     </article>
   );
