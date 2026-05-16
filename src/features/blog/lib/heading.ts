@@ -24,7 +24,7 @@ export const generateHeadingId = (
     .replace(/\s+/g, '-')
     .replace(/[^\p{L}\p{N}\-]/gu, '');
 
-  return `article-${articleNumber}-${slug}`;
+  return `article-${articleNumber}-${slug || 'heading'}`;
 };
 
 /**
