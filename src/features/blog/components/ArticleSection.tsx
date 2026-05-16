@@ -1,0 +1,43 @@
+import DOMPurify from 'isomorphic-dompurify';
+import { marked } from 'marked';
+
+import type { Article } from '@/features/blog/types';
+
+type ArticleSectionProps = {
+  article: Article;
+};
+
+const ALLOWED_URI_SCHEMES = ['http', 'https', 'mailto'];
+
+const ArticleSection = ({ article }: ArticleSectionProps) => {
+  const headingId = `article-${article.number}-heading`;
+  const renderer = new marked.Renderer();
+  renderer.html = () => '';
+  const rawHtml = marked.parse(article.content, {
+    async: false,
+    renderer,
+  }) as string;
+
+  const html = DOMPurify.sanitize(rawHtml, {
+    ALLOWED_URI_REGEXP: new RegExp(
+      `^(${ALLOWED_URI_SCHEMES.join('|')}):`,
+      'i',
+    ),
+  });
+
+  return (
+    <article aria-labelledby={headingId}>
+      <h2
+        id={headingId}
+        className="mb-4 text-2xl font-semibold text-gray-900 dark:text-gray-100"
+      >
+        第{article.number}節
+      </h2>
+      <div className="prose prose-gray dark:prose-invert max-w-none">
+        <div dangerouslySetInnerHTML={{ __html: html }} />
+      </div>
+    </article>
+  );
+};
+
+export default ArticleSection;
