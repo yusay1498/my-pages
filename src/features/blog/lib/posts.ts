@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 import { z } from 'zod';
@@ -6,9 +6,10 @@ import { z } from 'zod';
 import type { Article, Post, PostMeta } from '@/features/blog/types';
 
 const POSTS_DIR = path.resolve(process.cwd(), 'posts');
-const ARTICLE_FILE_PATTERN = /^(\d+)\..+\.md$/;
+const ARTICLE_FILE_PATTERN = /^(\d+)\.([a-z0-9-]+)\.md$/;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const SLUG_PATTERN = /^[a-z0-9-]+$/;
+const ARTICLE_FORMAT = '{number}.{slug}.md (slug: [a-z0-9-]+)';
 
 const postMetaSchema = z.object({
   title: z.string().min(1),
@@ -25,12 +26,15 @@ const readPostMeta = (postDir: string): PostMeta => {
   return postMetaSchema.parse(JSON.parse(rawMeta));
 };
 
-const readPostArticles = (postDir: string): Article[] => {
+const readPostArticles = (postDir: string, slug: string): Article[] => {
   return readdirSync(postDir)
+    .filter((filename) => filename.endsWith('.md'))
     .map((filename) => {
       const matched = filename.match(ARTICLE_FILE_PATTERN);
       if (!matched) {
-        return null;
+        throw new Error(
+          `Invalid article filename "${filename}" in posts/${slug}. Expected ${ARTICLE_FORMAT}.`,
+        );
       }
 
       return {
@@ -39,7 +43,6 @@ const readPostArticles = (postDir: string): Article[] => {
         content: readFileSync(path.join(postDir, filename), 'utf-8'),
       } satisfies Article;
     })
-    .filter((article): article is Article => article !== null)
     .sort((a, b) => a.number - b.number);
 };
 
@@ -49,8 +52,12 @@ const getAllPostDirectories = (): string[] => {
       .filter((entry) => entry.isDirectory())
       .map((entry) => entry.name)
       .filter((slug) => SLUG_PATTERN.test(slug));
-  } catch {
-    return [];
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+      return [];
+    }
+
+    throw error;
   }
 };
 
@@ -59,11 +66,17 @@ const getPostDirBySlug = (slug: string): string | null => {
     return null;
   }
 
-  if (!getAllPostDirectories().includes(slug)) {
-    return null;
-  }
+  const postDir = path.join(POSTS_DIR, slug);
 
-  return path.join(POSTS_DIR, slug);
+  try {
+    return statSync(postDir).isDirectory() ? postDir : null;
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+      return null;
+    }
+
+    throw error;
+  }
 };
 
 export const getPostBySlug = (slug: string): Post | null => {
@@ -75,7 +88,7 @@ export const getPostBySlug = (slug: string): Post | null => {
   return {
     slug,
     meta: readPostMeta(postDir),
-    articles: readPostArticles(postDir),
+    articles: readPostArticles(postDir, slug),
   };
 };
 
@@ -83,13 +96,18 @@ export const getAllPosts = (): Post[] => {
   return getAllPostDirectories()
     .map((slug) => {
       const postDir = path.join(POSTS_DIR, slug);
+      const meta = readPostMeta(postDir);
+      if (meta.status !== 'published') {
+        return null;
+      }
+
       return {
         slug,
-        meta: readPostMeta(postDir),
-        articles: readPostArticles(postDir),
+        meta,
+        articles: readPostArticles(postDir, slug),
       } satisfies Post;
     })
-    .filter((post) => post.meta.status === 'published')
+    .filter((post): post is Post => post !== null)
     .sort((a, b) => b.meta.updatedAt.localeCompare(a.meta.updatedAt));
 };
 
