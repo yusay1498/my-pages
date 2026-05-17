@@ -70,21 +70,17 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
         {project.language && <LanguageBadge language={project.language} />}
 
         {project.stars > 0 && (
-          <span
-            className="flex items-center gap-1"
-            aria-label={`スター数: ${project.stars}`}
-          >
+          <span className="flex items-center gap-1">
             <Star className="size-3.5" aria-hidden="true" />
+            <span className="sr-only">スター数:</span>
             {project.stars}
           </span>
         )}
 
         {project.forks > 0 && (
-          <span
-            className="flex items-center gap-1"
-            aria-label={`フォーク数: ${project.forks}`}
-          >
+          <span className="flex items-center gap-1">
             <GitFork className="size-3.5" aria-hidden="true" />
+            <span className="sr-only">フォーク数:</span>
             {project.forks}
           </span>
         )}

@@ -16,7 +16,7 @@ const gitHubRepositorySchema = z.object({
   stargazers_count: z.number(),
   forks_count: z.number(),
   topics: z.array(z.string()),
-  homepage: z.string().nullable(),
+  homepage: z.string().url().nullable().catch(null),
   updated_at: z.string(),
   created_at: z.string(),
   fork: z.boolean(),
