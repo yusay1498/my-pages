@@ -3,10 +3,17 @@ import tsPlugin from '@typescript-eslint/eslint-plugin';
 import nextConfig from 'eslint-config-next/core-web-vitals';
 import prettierPlugin from 'eslint-plugin-prettier/recommended';
 import tailwindcssPlugin from 'eslint-plugin-tailwindcss';
+import { createRequire } from 'node:module';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const _require = createRequire(import.meta.url);
+const { dependencies } = _require('./package.json');
+// ESLint 10 removed context.getFilename(); eslint-plugin-react uses it when version is 'detect'.
+// Read the major version from package.json to avoid that code path.
+const reactMajorVersion = dependencies.react.match(/\d+/)[0];
 
 export default [
   { ignores: ['node_modules/*'] },
@@ -32,7 +39,7 @@ export default [
   {
     files: ['**/*.ts', '**/*.tsx'],
     settings: {
-      react: { version: 'detect' },
+      react: { version: reactMajorVersion },
       'import/resolver': {
         typescript: {},
       },
