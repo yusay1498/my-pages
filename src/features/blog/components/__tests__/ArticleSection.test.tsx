@@ -51,12 +51,12 @@ A-->B
     expect(screen.getByRole('heading', { level: 3, name: '見出し3' }).id).toBe(
       'article-1-h3',
     );
-    expect(screen.getByText('項目1')).toBeDefined();
-    expect(screen.getByText('項目2')).toBeDefined();
-    expect(screen.getByText('const value = 1;')).toBeDefined();
+    screen.getByText('項目1');
+    screen.getByText('項目2');
+    screen.getByText('const value = 1;');
     expect(screen.getByTestId('mermaid-block').textContent).toContain(
       'graph TD',
     );
-    expect(screen.getByText('段落2です。')).toBeDefined();
+    screen.getByText('段落2です。');
   });
 });

@@ -81,7 +81,9 @@ const ArticleSection = ({ article, headingIdMap }: ArticleSectionProps) => {
   const renderer = new marked.Renderer();
   renderer.html = () => '';
   renderer.heading = ({ tokens, depth }) => {
-    const text = renderer.parser?.parseInline(tokens) ?? '';
+    const text =
+      renderer.parser?.parseInline(tokens) ??
+      tokens.map((token) => token.raw).join('');
     if (depth === 2 || depth === 3) {
       const id =
         headingIdMap.get(`${article.number}:${headingIndex}`) ??
