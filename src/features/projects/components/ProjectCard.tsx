@@ -85,7 +85,10 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
           </span>
         )}
 
-        <span className="ml-auto text-xs">{updatedAtDisplay}</span>
+        <span className="ml-auto text-xs">
+          <span className="sr-only">更新日:</span>
+          <time dateTime={project.updatedAt}>{updatedAtDisplay}</time>
+        </span>
       </div>
 
       {project.homepage && isSafeUrl(project.homepage) && (

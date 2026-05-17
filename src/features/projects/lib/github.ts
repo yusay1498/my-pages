@@ -31,12 +31,11 @@ const gitHubRepositoriesSchema = z.array(gitHubRepositorySchema);
  * GitHub API からパブリックリポジトリ一覧を取得する。
  * ビルド時（Static Export）に呼び出されることを前提としている。
  * API が利用不可の場合は空配列を返す（ビルドを止めない）。
+ * ページネーションに対応し、全ページ分のリポジトリを取得する。
  */
 export const fetchPublicRepositories = async (): Promise<
   readonly ProjectCard[]
 > => {
-  const url = `${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?type=public&sort=updated&per_page=100`;
-
   const headers: HeadersInit = {
     Accept: 'application/vnd.github.v3+json',
   };
@@ -48,27 +47,40 @@ export const fetchPublicRepositories = async (): Promise<
   }
 
   try {
-    const response = await fetch(url, { headers });
+    const allRepos: GitHubRepository[] = [];
+    let page = 1;
 
-    if (!response.ok) {
-      console.warn(
-        `GitHub API request failed: ${response.status} ${response.statusText}. Falling back to empty list.`,
-      );
-      return [];
+    // 全ページを取得するループ
+    while (true) {
+      const url = `${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?type=public&sort=updated&per_page=100&page=${page}`;
+      const response = await fetch(url, { headers });
+
+      if (!response.ok) {
+        console.warn(
+          `GitHub API request failed: ${response.status} ${response.statusText}. Falling back to empty list.`,
+        );
+        return [];
+      }
+
+      const json: unknown = await response.json();
+      const parsed = gitHubRepositoriesSchema.safeParse(json);
+
+      if (!parsed.success) {
+        console.warn(
+          'GitHub API response validation failed:',
+          parsed.error.message,
+        );
+        return [];
+      }
+
+      allRepos.push(...parsed.data);
+
+      // 取得件数が per_page 未満なら最終ページ
+      if (parsed.data.length < 100) break;
+      page++;
     }
 
-    const json: unknown = await response.json();
-    const parsed = gitHubRepositoriesSchema.safeParse(json);
-
-    if (!parsed.success) {
-      console.warn(
-        'GitHub API response validation failed:',
-        parsed.error.message,
-      );
-      return [];
-    }
-
-    return parsed.data
+    return allRepos
       .filter((repo) => !repo.fork && !repo.archived)
       .map(toProjectCard)
       .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));

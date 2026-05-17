@@ -50,13 +50,21 @@ my-pages/
 │   │   │   └── types/
 │   │   │       └── index.ts             # ブログ関連の型定義
 │   │   └── projects/
+│   │   │   ├── components/
+│   │   │   │   ├── ProjectCard.tsx       # プロジェクトカード（一覧用）
+│   │   │   │   └── LanguageBadge.tsx     # 言語バッジ表示
+│   │   │   ├── lib/
+│   │   │   │   └── github.ts            # GitHub API データ取得ロジック
+│   │   │   └── types/
+│   │   │       └── index.ts             # プロジェクト関連の型定義
+│   │   └── portfolio/
 │   │       ├── components/
-│   │       │   ├── ProjectCard.tsx       # プロジェクトカード（一覧用）
-│   │       │   └── LanguageBadge.tsx     # 言語バッジ表示
-│   │       ├── lib/
-│   │       │   └── github.ts            # GitHub API データ取得ロジック
+│   │       │   └── LinksSection.tsx      # トップページのリンクセクション
+│   │       ├── data/
+│   │       │   ├── portfolio-sites.ts    # ポートフォリオサイトデータ
+│   │       │   └── external-profiles.ts  # 外部プロフィールデータ
 │   │       └── types/
-│   │           └── index.ts             # プロジェクト関連の型定義
+│   │           └── index.ts             # ポートフォリオ関連の型定義
 │   ├── hooks/                            # 共通カスタムフック
 │   ├── lib/                              # 共通ユーティリティ（外部ライブラリのラッパー等）
 │   ├── styles/                           # グローバルスタイル
