@@ -71,8 +71,8 @@ const LinksSection = () => {
 
       {/* ポートフォリオサイト */}
       <div className="mt-4">
-        <h3 className="text-sm font-semibold tracking-wider text-gray-500 uppercase dark:text-gray-400">
-          Portfolio Sites
+        <h3 className="text-sm font-semibold tracking-wider text-gray-500 dark:text-gray-400">
+          PORTFOLIO SITES
         </h3>
         <div className="mt-2 grid gap-3 sm:grid-cols-2">
           {PORTFOLIO_SITES.map((link) => (
@@ -83,8 +83,8 @@ const LinksSection = () => {
 
       {/* 外部プロフィール・Projects ページ */}
       <div className="mt-6">
-        <h3 className="text-sm font-semibold tracking-wider text-gray-500 uppercase dark:text-gray-400">
-          Profiles &amp; Projects
+        <h3 className="text-sm font-semibold tracking-wider text-gray-500 dark:text-gray-400">
+          PROFILES &amp; PROJECTS
         </h3>
         <div className="mt-2 grid gap-3 sm:grid-cols-2">
           {EXTERNAL_PROFILES.map((link) => (
