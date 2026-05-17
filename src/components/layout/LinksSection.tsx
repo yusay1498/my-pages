@@ -35,6 +35,11 @@ const EXTERNAL_PROFILES: readonly SiteLink[] = [
     url: 'https://github.com/yusay1498',
     description: 'GitHub プロフィール',
   },
+  {
+    label: 'Qiita',
+    url: 'https://qiita.com/yusay1498',
+    description: 'Qiita プロフィール',
+  },
 ];
 
 const ExternalLinkCard = ({ link }: { readonly link: SiteLink }) => (
