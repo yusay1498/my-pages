@@ -1,6 +1,6 @@
-import LinksSection from '@/components/layout/LinksSection';
 import PostCard from '@/features/blog/components/PostCard';
 import { getAllPostSummaries } from '@/features/blog/lib/posts';
+import LinksSection from '@/features/portfolio/components/LinksSection';
 
 const HomePage = () => {
   const posts = getAllPostSummaries();

@@ -1,12 +1,10 @@
 import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
-import {
-  EXTERNAL_PROFILES,
-  PORTFOLIO_SITES,
-  type SiteLink,
-} from '@/config/links';
 import { paths } from '@/config/paths';
+import { EXTERNAL_PROFILES } from '@/features/portfolio/data/external-profiles';
+import { PORTFOLIO_SITES } from '@/features/portfolio/data/portfolio-sites';
+import type { SiteLink } from '@/features/portfolio/types';
 
 const ExternalLinkCard = ({ link }: { readonly link: SiteLink }) => (
   <a
