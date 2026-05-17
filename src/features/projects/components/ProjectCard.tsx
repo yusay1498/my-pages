@@ -4,6 +4,17 @@ import type { ProjectCard as ProjectCardType } from '@/features/projects/types';
 
 import { LanguageBadge } from './LanguageBadge';
 
+const ALLOWED_PROTOCOLS = new Set(['http:', 'https:']);
+
+/** 許可されたプロトコルの URL かどうかを判定する */
+const isSafeUrl = (url: string): boolean => {
+  try {
+    return ALLOWED_PROTOCOLS.has(new URL(url).protocol);
+  } catch {
+    return false;
+  }
+};
+
 type ProjectCardProps = {
   readonly project: ProjectCardType;
 };
@@ -59,14 +70,20 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
         {project.language && <LanguageBadge language={project.language} />}
 
         {project.stars > 0 && (
-          <span className="flex items-center gap-1">
+          <span
+            className="flex items-center gap-1"
+            aria-label={`スター数: ${project.stars}`}
+          >
             <Star className="size-3.5" aria-hidden="true" />
             {project.stars}
           </span>
         )}
 
         {project.forks > 0 && (
-          <span className="flex items-center gap-1">
+          <span
+            className="flex items-center gap-1"
+            aria-label={`フォーク数: ${project.forks}`}
+          >
             <GitFork className="size-3.5" aria-hidden="true" />
             {project.forks}
           </span>
@@ -75,11 +92,12 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
         <span className="ml-auto text-xs">{updatedAtDisplay}</span>
       </div>
 
-      {project.homepage && (
+      {project.homepage && isSafeUrl(project.homepage) && (
         <a
           href={project.homepage}
           target="_blank"
           rel="noopener noreferrer"
+          aria-label={`${project.name} のサイトを見る（新しいウィンドウで開く）`}
           className="mt-3 inline-flex items-center gap-1 text-sm text-blue-600 hover:underline dark:text-blue-400"
         >
           サイトを見る

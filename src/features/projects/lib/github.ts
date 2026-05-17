@@ -1,7 +1,31 @@
-import type { GitHubRepository, ProjectCard } from '@/features/projects/types';
+import { z } from 'zod';
 
-const GITHUB_USERNAME = 'yusay1498';
+import { GITHUB_USERNAME } from '@/config/site';
+import type { ProjectCard } from '@/features/projects/types';
+
 const GITHUB_API_BASE = 'https://api.github.com';
+
+/** GitHub API レスポンスのバリデーションスキーマ */
+const gitHubRepositorySchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  full_name: z.string(),
+  html_url: z.string().url(),
+  description: z.string().nullable(),
+  language: z.string().nullable(),
+  stargazers_count: z.number(),
+  forks_count: z.number(),
+  topics: z.array(z.string()),
+  homepage: z.string().nullable(),
+  updated_at: z.string(),
+  created_at: z.string(),
+  fork: z.boolean(),
+  archived: z.boolean(),
+});
+
+type GitHubRepository = z.infer<typeof gitHubRepositorySchema>;
+
+const gitHubRepositoriesSchema = z.array(gitHubRepositorySchema);
 
 /**
  * GitHub API からパブリックリポジトリ一覧を取得する。
@@ -33,9 +57,18 @@ export const fetchPublicRepositories = async (): Promise<
       return [];
     }
 
-    const repositories: GitHubRepository[] = await response.json();
+    const json: unknown = await response.json();
+    const parsed = gitHubRepositoriesSchema.safeParse(json);
 
-    return repositories
+    if (!parsed.success) {
+      console.warn(
+        'GitHub API response validation failed:',
+        parsed.error.message,
+      );
+      return [];
+    }
+
+    return parsed.data
       .filter((repo) => !repo.fork && !repo.archived)
       .map(toProjectCard)
       .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));

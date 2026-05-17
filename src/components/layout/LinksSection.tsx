@@ -13,6 +13,7 @@ const ExternalLinkCard = ({ link }: { readonly link: SiteLink }) => (
     href={link.url}
     target="_blank"
     rel="noopener noreferrer"
+    aria-label={`${link.label}（新しいウィンドウで開く）`}
     className="group flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
   >
     <div className="min-w-0 flex-1">
