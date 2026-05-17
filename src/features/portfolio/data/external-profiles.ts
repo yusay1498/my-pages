@@ -10,7 +10,7 @@ export const EXTERNAL_PROFILES: readonly SiteLink[] = [
   },
   {
     label: 'Qiita',
-    url: `https://qiita.com/${GITHUB_USERNAME}`,
+    url: 'https://qiita.com/yusay1498',
     description: 'Qiita プロフィール',
   },
 ];

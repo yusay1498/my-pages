@@ -5,6 +5,12 @@ import type { ProjectCard } from '@/features/projects/types';
 
 const GITHUB_API_BASE = 'https://api.github.com';
 
+/** 1リクエストあたりの最大取得件数 */
+const PER_PAGE = 100;
+
+/** ページネーションの最大ページ数（安全弁） */
+const MAX_PAGES = 10;
+
 /** GitHub API レスポンスのバリデーションスキーマ */
 const gitHubRepositorySchema = z.object({
   id: z.number(),
@@ -50,9 +56,8 @@ export const fetchPublicRepositories = async (): Promise<
     const allRepos: GitHubRepository[] = [];
     let page = 1;
 
-    // 全ページを取得するループ
-    while (true) {
-      const url = `${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?type=public&sort=updated&per_page=100&page=${page}`;
+    while (page <= MAX_PAGES) {
+      const url = `${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?type=public&sort=updated&per_page=${PER_PAGE}&page=${page}`;
       const response = await fetch(url, { headers });
 
       if (!response.ok) {
@@ -76,7 +81,7 @@ export const fetchPublicRepositories = async (): Promise<
       allRepos.push(...parsed.data);
 
       // 取得件数が per_page 未満なら最終ページ
-      if (parsed.data.length < 100) break;
+      if (parsed.data.length < PER_PAGE) break;
       page++;
     }
 
