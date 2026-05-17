@@ -229,11 +229,6 @@ my-pages/
 - RSS フィード
 - 全文検索
 
-### 外部連携・ポートフォリオ導線
-
-- ✅ 他のGitHub Pagesポートフォリオサイトへのナビゲーションリンク（トップページにリンクセクション）
-- ✅ 「Projects」ページの追加（GitHub APIからビルド時にリポジトリ情報を取得し、カード形式で一覧表示）
-
 ### API Playground（Java学習用）
 
 - Java学習用REST APIの公開（Spring Boot等、別リポジトリで構築・デプロイ）

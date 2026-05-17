@@ -1,46 +1,12 @@
 import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
+import {
+  EXTERNAL_PROFILES,
+  PORTFOLIO_SITES,
+  type SiteLink,
+} from '@/config/links';
 import { paths } from '@/config/paths';
-
-type SiteLink = {
-  readonly label: string;
-  readonly url: string;
-  readonly description: string;
-};
-
-/** GitHub Pages で公開中のポートフォリオサイト */
-const PORTFOLIO_SITES: readonly SiteLink[] = [
-  {
-    label: 'Othello by Next.js',
-    url: 'https://yusay1498.github.io/othello-by-nextjs/',
-    description: 'Next.js で作成したオセロゲーム',
-  },
-  {
-    label: 'Survey System',
-    url: 'https://yusay1498.github.io/survey-system/',
-    description: 'アンケートシステムのフロントエンド',
-  },
-  {
-    label: 'Queries Test',
-    url: 'https://yusay1498.github.io/queries-test/',
-    description: 'CSS クエリのテストページ',
-  },
-];
-
-/** 外部プロフィール・SNS リンク */
-const EXTERNAL_PROFILES: readonly SiteLink[] = [
-  {
-    label: 'GitHub',
-    url: 'https://github.com/yusay1498',
-    description: 'GitHub プロフィール',
-  },
-  {
-    label: 'Qiita',
-    url: 'https://qiita.com/yusay1498',
-    description: 'Qiita プロフィール',
-  },
-];
 
 const ExternalLinkCard = ({ link }: { readonly link: SiteLink }) => (
   <a
