@@ -36,6 +36,9 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
+      - name: Run tests
+        run: npm run test
+
       - name: Build project
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
