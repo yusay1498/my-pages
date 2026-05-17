@@ -10,7 +10,7 @@ vi.mock('@/features/blog/components/MermaidBlockLazy', () => ({
 }));
 
 describe('ArticleSection', () => {
-  it('空行・リスト・コード・Mermaid を含むMarkdownを安定して描画する', () => {
+  it('空行・リスト・コード・Mermaid を含むMarkdownを描画し見出しIDを付与する', () => {
     render(
       <ArticleSection
         article={{
