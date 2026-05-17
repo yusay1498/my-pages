@@ -28,25 +28,35 @@
 my-pages/
 ├── src/
 │   ├── app/
-│   │   ├── page.tsx                      # トップページ（テーマ一覧）
-│   │   └── posts/
-│   │       └── [slug]/
-│   │           └── page.tsx              # テーマ別ページ
+│   │   ├── page.tsx                      # トップページ（テーマ一覧 + リンクセクション）
+│   │   ├── posts/
+│   │   │   └── [slug]/
+│   │   │       └── page.tsx              # テーマ別ページ
+│   │   └── projects/
+│   │       └── page.tsx                  # Projectsページ（リポジトリ一覧）
 │   ├── components/                       # 共通UIコンポーネント
 │   │   └── layout/
 │   │       ├── Header.tsx
 │   │       └── Footer.tsx
 │   ├── config/                           # アプリ設定
 │   ├── features/                         # 機能単位のモジュール
-│   │   └── blog/
+│   │   ├── blog/
+│   │   │   ├── components/
+│   │   │   │   ├── PostCard.tsx          # テーマカード（一覧用）
+│   │   │   │   ├── ArticleSection.tsx    # 記事セクション（テーマページ用）
+│   │   │   │   └── MermaidBlock.tsx      # Mermaidダイアグラム描画（Client Component）
+│   │   │   ├── lib/
+│   │   │   │   └── posts.ts             # Markdown読み込み・解析ロジック
+│   │   │   └── types/
+│   │   │       └── index.ts             # ブログ関連の型定義
+│   │   └── projects/
 │   │       ├── components/
-│   │       │   ├── PostCard.tsx          # テーマカード（一覧用）
-│   │       │   ├── ArticleSection.tsx    # 記事セクション（テーマページ用）
-│   │       │   └── MermaidBlock.tsx      # Mermaidダイアグラム描画（Client Component）
+│   │       │   ├── ProjectCard.tsx       # プロジェクトカード（一覧用）
+│   │       │   └── LanguageBadge.tsx     # 言語バッジ表示
 │   │       ├── lib/
-│   │       │   └── posts.ts             # Markdown読み込み・解析ロジック
+│   │       │   └── github.ts            # GitHub API データ取得ロジック
 │   │       └── types/
-│   │           └── index.ts             # ブログ関連の型定義
+│   │           └── index.ts             # プロジェクト関連の型定義
 │   ├── hooks/                            # 共通カスタムフック
 │   ├── lib/                              # 共通ユーティリティ（外部ライブラリのラッパー等）
 │   ├── styles/                           # グローバルスタイル
@@ -142,8 +152,9 @@ my-pages/
 
 | URL | 表示内容 |
 |---|---|
-| `/` | トップページ（publishedなテーマ一覧） |
+| `/` | トップページ（publishedなテーマ一覧 + リンクセクション） |
 | `/posts/{テーマスラッグ}` | テーマページ（配下の記事を番号順にまとめて表示） |
+| `/projects` | Projects ページ（GitHub パブリックリポジトリ一覧） |
 
 ## 6. ページ仕様
 
@@ -152,6 +163,15 @@ my-pages/
 - publishedなテーマをカード形式で一覧表示
 - 表示情報: タイトル、説明、タグ、更新日
 - 並び順: updatedAtの降順
+- リンクセクション: ポートフォリオサイト・外部プロフィール・Projectsページへの導線
+
+### Projects ページ (`/projects`)
+
+- GitHub API からビルド時にパブリックリポジトリ情報を取得
+- fork・archived は除外
+- カード形式で一覧表示（リポジトリ名、説明、言語、スター数、フォーク数、トピック、更新日）
+- `GITHUB_TOKEN` 環境変数で API レート制限を緩和（GitHub Actions では自動提供）
+- API が利用不可の場合はビルドを止めず空一覧を表示
 
 ### テーマページ (`/posts/{slug}`)
 
@@ -211,8 +231,8 @@ my-pages/
 
 ### 外部連携・ポートフォリオ導線
 
-- 他のGitHub Pagesポートフォリオサイトへのナビゲーションリンク（`Header` またはトップページにリンクセクション）
-- 「Projects」ページの追加（自分のリポジトリ・成果物をカード形式で一覧表示）
+- ✅ 他のGitHub Pagesポートフォリオサイトへのナビゲーションリンク（トップページにリンクセクション）
+- ✅ 「Projects」ページの追加（GitHub APIからビルド時にリポジトリ情報を取得し、カード形式で一覧表示）
 
 ### API Playground（Java学習用）
 
