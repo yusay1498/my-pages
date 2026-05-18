@@ -1,6 +1,7 @@
 import PostCard from '@/features/blog/components/PostCard';
 import { getAllPostSummaries } from '@/features/blog/lib/posts';
 import LinksSection from '@/features/portfolio/components/LinksSection';
+import { SITE_DESCRIPTION, SITE_TITLE } from '@/config/site';
 
 const HomePage = () => {
   const posts = getAllPostSummaries();
@@ -9,10 +10,10 @@ const HomePage = () => {
     <div className="mx-auto w-full max-w-4xl px-4 py-12">
       <header className="mb-10">
         <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl dark:text-gray-100">
-          Yusay&apos;s TIL
+          {SITE_TITLE}
         </h1>
         <p className="mt-3 text-gray-600 dark:text-gray-300">
-          個人の学習アウトプットブログ
+          {SITE_DESCRIPTION}
         </p>
       </header>
 

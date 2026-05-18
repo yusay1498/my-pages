@@ -25,10 +25,15 @@ npm run dev
 | コマンド | 説明 |
 | --- | --- |
 | `npm run dev` | 開発サーバーを起動 |
-| `npm run build` | 静的サイトをビルド |
+| `npm run build` | 静的サイトをビルド（`out/rss.xml` も生成） |
 | `npx serve@latest out` | ビルド済みの静的サイト（`out/`）を配信 |
 | `npm run lint` | ESLint を実行 |
 | `npm run check-types` | TypeScript の型チェック |
+
+## RSSフィード
+
+- ビルド時（`npm run build`）に `out/rss.xml` を生成します。
+- GitHub Pages公開時のURLは `https://yusay1498.github.io/my-pages/rss.xml` です。
 
 ## ディレクトリ構成
 

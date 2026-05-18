@@ -27,6 +27,12 @@ describe('paths', () => {
     });
   });
 
+  describe('rss', () => {
+    it('RSSフィードのパスを返す', () => {
+      expect(paths.rss.getHref()).toBe('/rss.xml');
+    });
+  });
+
   describe('projects', () => {
     it('プロジェクトページのパスを返す', () => {
       expect(paths.projects.getHref()).toBe('/projects');
