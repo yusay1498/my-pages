@@ -173,6 +173,17 @@ my-pages/
 - 並び順: updatedAtの降順
 - リンクセクション: ポートフォリオサイト・外部プロフィール・Projectsページへの導線
 
+### OGP画像・メタデータ
+
+- Next.js App Router の `opengraph-image` でOGP画像を静的生成する
+- 生成対象:
+  - `/opengraph-image.png`（トップページ）
+  - `/projects/opengraph-image.png`（Projectsページ）
+  - `/posts/{記事スラッグ}/opengraph-image.png`（記事詳細ページ）
+- 記事詳細ページは `meta.json` の `title` / `description` をOGP画像と metadata に利用する
+- OGP画像はビルド時にHTMLと同時に生成される
+- metadata は `openGraph` / `twitter` / canonical URL を各ページで設定する
+
 ### Projects ページ (`/projects`)
 
 - GitHub API からビルド時にパブリックリポジトリ情報を取得
@@ -233,7 +244,6 @@ my-pages/
 ### サイト機能
 
 - タグ別一覧ページ
-- OGP画像の自動生成
 - 全文検索
 
 ### API Playground（Java学習用）

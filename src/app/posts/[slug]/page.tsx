@@ -2,17 +2,24 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Fragment } from 'react';
 
+import { paths } from '@/config/paths';
+import {
+  OPEN_GRAPH_LOCALE,
+  SITE_TITLE,
+  toAbsoluteSiteUrl,
+} from '@/config/site';
 import ArticleSection from '@/features/blog/components/ArticleSection';
 import TableOfContents from '@/features/blog/components/TableOfContents';
+import { PLACEHOLDER_SLUG } from '@/features/blog/lib/constants';
 import { extractTocItems } from '@/features/blog/lib/heading';
 import {
   getAllSlugs,
   getPostBySlug,
   getPostMetaBySlug,
 } from '@/features/blog/lib/posts';
+import { OGP_IMAGE_SIZE } from '@/features/seo/lib/og-image';
 
 export const dynamicParams = false;
-const PLACEHOLDER_SLUG = '__placeholder__';
 
 export async function generateStaticParams() {
   const slugs = getAllSlugs();
@@ -37,6 +44,30 @@ export async function generateMetadata({
   return {
     title: meta.title,
     description: meta.description,
+    alternates: {
+      canonical: toAbsoluteSiteUrl(paths.post.getHref(slug)),
+    },
+    openGraph: {
+      type: 'article',
+      locale: OPEN_GRAPH_LOCALE,
+      title: meta.title,
+      description: meta.description,
+      url: toAbsoluteSiteUrl(paths.post.getHref(slug)),
+      siteName: SITE_TITLE,
+      images: [
+        {
+          url: toAbsoluteSiteUrl(paths.post.getOgpImageHref(slug)),
+          width: OGP_IMAGE_SIZE.width,
+          height: OGP_IMAGE_SIZE.height,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: meta.title,
+      description: meta.description,
+      images: [toAbsoluteSiteUrl(paths.post.getOgpImageHref(slug))],
+    },
   };
 }
 

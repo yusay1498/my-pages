@@ -1,11 +1,45 @@
 import type { Metadata } from 'next';
 
+import { paths } from '@/config/paths';
+import {
+  OPEN_GRAPH_LOCALE,
+  OPEN_GRAPH_TYPE_WEBSITE,
+  PROJECTS_DESCRIPTION,
+  PROJECTS_TITLE,
+  SITE_TITLE,
+  toAbsoluteSiteUrl,
+} from '@/config/site';
 import ProjectCard from '@/features/projects/components/ProjectCard';
 import { fetchPublicRepositories } from '@/features/projects/lib/github';
+import { OGP_IMAGE_SIZE } from '@/features/seo/lib/og-image';
 
 export const metadata: Metadata = {
-  title: "Projects - Yusay's TIL",
-  description: 'パブリックリポジトリの一覧',
+  title: PROJECTS_TITLE,
+  description: PROJECTS_DESCRIPTION,
+  alternates: {
+    canonical: toAbsoluteSiteUrl(paths.projects.getHref()),
+  },
+  openGraph: {
+    type: OPEN_GRAPH_TYPE_WEBSITE,
+    locale: OPEN_GRAPH_LOCALE,
+    title: PROJECTS_TITLE,
+    description: PROJECTS_DESCRIPTION,
+    siteName: SITE_TITLE,
+    url: toAbsoluteSiteUrl(paths.projects.getHref()),
+    images: [
+      {
+        url: toAbsoluteSiteUrl(paths.projects.getOgpImageHref()),
+        width: OGP_IMAGE_SIZE.width,
+        height: OGP_IMAGE_SIZE.height,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: PROJECTS_TITLE,
+    description: PROJECTS_DESCRIPTION,
+    images: [toAbsoluteSiteUrl(paths.projects.getOgpImageHref())],
+  },
 };
 
 const ProjectsPage = async () => {

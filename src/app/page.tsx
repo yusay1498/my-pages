@@ -1,7 +1,46 @@
-import { SITE_DESCRIPTION, SITE_TITLE } from '@/config/site';
+import type { Metadata } from 'next';
+
+import { paths } from '@/config/paths';
+import {
+  OPEN_GRAPH_LOCALE,
+  OPEN_GRAPH_TYPE_WEBSITE,
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+  toAbsoluteSiteUrl,
+} from '@/config/site';
 import PostCard from '@/features/blog/components/PostCard';
 import { getAllPostSummaries } from '@/features/blog/lib/posts';
 import LinksSection from '@/features/portfolio/components/LinksSection';
+import { OGP_IMAGE_SIZE } from '@/features/seo/lib/og-image';
+
+export const metadata: Metadata = {
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  alternates: {
+    canonical: toAbsoluteSiteUrl(paths.home.getHref()),
+  },
+  openGraph: {
+    type: OPEN_GRAPH_TYPE_WEBSITE,
+    locale: OPEN_GRAPH_LOCALE,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    siteName: SITE_TITLE,
+    url: toAbsoluteSiteUrl(paths.home.getHref()),
+    images: [
+      {
+        url: toAbsoluteSiteUrl(paths.home.getOgpImageHref()),
+        width: OGP_IMAGE_SIZE.width,
+        height: OGP_IMAGE_SIZE.height,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [toAbsoluteSiteUrl(paths.home.getOgpImageHref())],
+  },
+};
 
 const HomePage = () => {
   const posts = getAllPostSummaries();

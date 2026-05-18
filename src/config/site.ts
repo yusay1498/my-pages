@@ -28,6 +28,10 @@ const trimSlashes = (
 
 export const SITE_TITLE = "Yusay's TIL";
 export const SITE_DESCRIPTION = '個人の学習アウトプットブログ';
+export const OPEN_GRAPH_LOCALE = 'ja_JP';
+export const OPEN_GRAPH_TYPE_WEBSITE = 'website';
+export const PROJECTS_TITLE = `Projects - ${SITE_TITLE}`;
+export const PROJECTS_DESCRIPTION = 'パブリックリポジトリの一覧';
 export const GITHUB_USERNAME = process.env.GITHUB_USERNAME ?? 'yusay1498';
 export const REPOSITORY_NAME =
   process.env.NEXT_PUBLIC_REPOSITORY_NAME ?? 'my-pages';
@@ -53,3 +57,34 @@ if (!/^https?:\/\//.test(normalizedSiteUrl)) {
 // 2) NEXT_PUBLIC_URL（互換用のフォールバックURL）
 // 3) GitHub Pages向け既定URL
 export const SITE_URL = normalizedSiteUrl;
+
+/**
+ * サイト配信URL（basePathを含む）を基準に絶対URLを組み立てます。
+ *
+ * @param path 先頭スラッシュ付きのパス（basePath の有無を問わない）
+ * @returns 絶対URL
+ */
+export const toAbsoluteSiteUrl = (path: string): string => {
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+
+  if (normalizedPath === '/') {
+    return SITE_URL;
+  }
+
+  if (!BASE_PATH) {
+    return `${SITE_URL}${normalizedPath}`;
+  }
+
+  // BASE_PATH を含む入力は重複を避けるために取り除く。
+  // 例: SITE_URL=https://example.com/my-pages に対して
+  // - /my-pages/projects => /projects に正規化
+  // - /about => そのまま /about
+  const pathWithoutBasePath =
+    normalizedPath === BASE_PATH
+      ? ''
+      : normalizedPath.startsWith(`${BASE_PATH}/`)
+        ? normalizedPath.slice(BASE_PATH.length)
+        : normalizedPath;
+
+  return `${SITE_URL}${pathWithoutBasePath}`;
+};
