@@ -132,7 +132,9 @@ export const getAllPublishedTagsFromSummaries = (
 
   postSummaries.forEach((summary) => {
     summary.meta.tags.forEach((tag) => {
-      uniqueTags.add(tag);
+      if (tag.trim().length > 0) {
+        uniqueTags.add(tag);
+      }
     });
   });
 

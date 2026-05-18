@@ -54,6 +54,25 @@ describe('getAllPublishedTagsFromSummaries', () => {
   it('記事が空なら空配列を返す', () => {
     expect(getAllPublishedTagsFromSummaries([])).toEqual([]);
   });
+
+  it('空文字や空白のみのタグを除外する', () => {
+    const summariesWithEmptyTags: PostSummary[] = [
+      {
+        slug: 'post-d',
+        meta: {
+          title: 'Post D',
+          description: 'D',
+          tags: ['React', '', '  '],
+          createdAt: '2026-01-07',
+          updatedAt: '2026-01-08',
+          status: 'published',
+        },
+      },
+    ];
+    expect(getAllPublishedTagsFromSummaries(summariesWithEmptyTags)).toEqual([
+      'React',
+    ]);
+  });
 });
 
 describe('getPostSummariesByTagFromSummaries', () => {

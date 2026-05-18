@@ -17,14 +17,6 @@ import {
 
 export const dynamicParams = false;
 
-const decodeTagParam = (tag: string): string | null => {
-  try {
-    return decodeURIComponent(tag);
-  } catch {
-    return null;
-  }
-};
-
 export async function generateStaticParams() {
   const tags = getAllPublishedTags();
 
@@ -34,34 +26,29 @@ export async function generateStaticParams() {
 type PageParams = { params: Promise<{ tag: string }> };
 
 const getTagPageData = cache((tag: string) => {
-  const decodedTag = decodeTagParam(tag);
-  if (!decodedTag) {
-    notFound();
-  }
-
-  const posts = getPostSummariesByTag(decodedTag);
+  const posts = getPostSummariesByTag(tag);
 
   if (posts.length === 0) {
     notFound();
   }
 
-  return { decodedTag, posts };
+  return { posts };
 });
 
 export async function generateMetadata({
   params,
 }: PageParams): Promise<Metadata> {
   const { tag } = await params;
-  const { decodedTag } = getTagPageData(tag);
+  getTagPageData(tag);
 
-  const title = `${decodedTag} の記事一覧 - ${SITE_TITLE}`;
-  const description = `タグ「${decodedTag}」の記事一覧ページです。`;
+  const title = `${tag} の記事一覧 - ${SITE_TITLE}`;
+  const description = `タグ「${tag}」の記事一覧ページです。`;
 
   return {
     title,
     description,
     alternates: {
-      canonical: toAbsoluteSiteUrl(paths.tag.getHref(decodedTag)),
+      canonical: toAbsoluteSiteUrl(paths.tag.getHref(tag)),
     },
     openGraph: {
       type: OPEN_GRAPH_TYPE_WEBSITE,
@@ -69,7 +56,7 @@ export async function generateMetadata({
       title,
       description,
       siteName: SITE_TITLE,
-      url: toAbsoluteSiteUrl(paths.tag.getHref(decodedTag)),
+      url: toAbsoluteSiteUrl(paths.tag.getHref(tag)),
     },
     twitter: {
       card: 'summary',
@@ -81,16 +68,16 @@ export async function generateMetadata({
 
 const TagPage = async ({ params }: PageParams) => {
   const { tag } = await params;
-  const { decodedTag, posts } = getTagPageData(tag);
+  const { posts } = getTagPageData(tag);
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-12">
       <header className="mb-10">
         <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl dark:text-gray-100">
-          タグ: {decodedTag}
+          タグ: {tag}
         </h1>
         <p className="mt-3 text-gray-600 dark:text-gray-300">
-          「{decodedTag}」の記事一覧です。
+          「{tag}」の記事一覧です。
         </p>
       </header>
 
