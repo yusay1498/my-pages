@@ -10,12 +10,12 @@ export const metadata: Metadata = {
   title: PROJECTS_TITLE,
   description: PROJECTS_DESCRIPTION,
   alternates: {
-    canonical: '/projects',
+    canonical: paths.projects.getHref(),
   },
   openGraph: {
     title: PROJECTS_TITLE,
     description: PROJECTS_DESCRIPTION,
-    url: '/projects',
+    url: paths.projects.getHref(),
     images: [
       {
         url: paths.projects.getOgpImageHref(),

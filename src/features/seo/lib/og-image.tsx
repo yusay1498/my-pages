@@ -9,10 +9,10 @@ export const OGP_IMAGE_SIZE = {
 
 export const OGP_IMAGE_CONTENT_TYPE = 'image/png';
 
-const OGP_GRADIENT =
+export const OGP_GRADIENT =
   'linear-gradient(135deg, rgb(17, 24, 39), rgb(31, 41, 55) 45%, rgb(59, 130, 246))';
-const OGP_IMAGE_PADDING = '56px';
-const OGP_IMAGE_FONT_FAMILY =
+export const OGP_IMAGE_PADDING = '56px';
+export const OGP_IMAGE_FONT_FAMILY =
   'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
 
 type CreateOgpImageInput = {
