@@ -31,6 +31,26 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# env
+.env
+.env.*
+
+# Next.js
+.next/
+out/
+next-env.d.ts
+
+# TypeScript
+tsconfig.tsbuildinfo
+
+# test
+coverage/
+test-results/
+playwright-report/
+
+# Storybook
+storybook-static/
+
 node_modules
 dist
 dist-ssr
