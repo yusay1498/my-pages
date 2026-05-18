@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+import { SITE_TITLE } from '@/config/site';
+
 export const Header = () => {
   return (
     <header className="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
@@ -8,7 +10,7 @@ export const Header = () => {
           href="/"
           className="text-lg font-bold tracking-tight text-gray-900 hover:text-blue-600 dark:text-gray-100 dark:hover:text-blue-400"
         >
-          Yusay&apos;s TIL
+          {SITE_TITLE}
         </Link>
       </div>
     </header>

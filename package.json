@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && npm run generate:rss",
     "start": "next start",
     "test": "vitest run",
     "lint": "eslint src",
     "prepare": "husky",
-    "check-types": "tsc --project tsconfig.json --pretty --noEmit"
+    "check-types": "tsc --project tsconfig.json --pretty --noEmit",
+    "generate:rss": "tsx scripts/generate-rss.ts"
   },
   "dependencies": {
     "@next/env": "^16.2.6",

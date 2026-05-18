@@ -234,7 +234,6 @@ my-pages/
 
 - タグ別一覧ページ
 - OGP画像の自動生成
-- RSS フィード
 - 全文検索
 
 ### API Playground（Java学習用）
