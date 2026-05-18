@@ -15,7 +15,7 @@ export const OGP_IMAGE_PADDING = '56px';
 export const OGP_IMAGE_FONT_FAMILY =
   'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
 
-type CreateOgpImageInput = {
+type OgpImageParams = {
   readonly title: string;
   readonly description: string;
 };
@@ -23,7 +23,7 @@ type CreateOgpImageInput = {
 export const createOgpImage = ({
   title,
   description,
-}: CreateOgpImageInput): ImageResponse => {
+}: OgpImageParams): ImageResponse => {
   return new ImageResponse(
     <div
       style={{

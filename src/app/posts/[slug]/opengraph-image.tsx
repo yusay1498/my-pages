@@ -25,7 +25,7 @@ type OgpImageParams = {
   readonly params: Promise<{ slug: string }>;
 };
 
-const OpengraphImage = async ({ params }: OgpImageParams) => {
+const PostOpengraphImage = async ({ params }: OgpImageParams) => {
   const { slug } = await params;
   const meta = getPostMetaBySlug(slug);
 
@@ -39,4 +39,4 @@ const OpengraphImage = async ({ params }: OgpImageParams) => {
   });
 };
 
-export default OpengraphImage;
+export default PostOpengraphImage;
