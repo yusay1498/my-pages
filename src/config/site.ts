@@ -67,12 +67,20 @@ export const SITE_URL = normalizedSiteUrl;
 export const toAbsoluteSiteUrl = (path: string): string => {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
 
-  if (
-    BASE_PATH &&
-    (normalizedPath === BASE_PATH || normalizedPath.startsWith(`${BASE_PATH}/`))
-  ) {
-    const pathWithoutBasePath = normalizedPath.slice(BASE_PATH.length) || '/';
-    return `${SITE_URL}${pathWithoutBasePath}`;
+  if (normalizedPath === '/') {
+    return SITE_URL;
+  }
+
+  if (!BASE_PATH) {
+    return `${SITE_URL}${normalizedPath}`;
+  }
+
+  if (normalizedPath === BASE_PATH) {
+    return SITE_URL;
+  }
+
+  if (normalizedPath.startsWith(`${BASE_PATH}/`)) {
+    return `${SITE_URL}${normalizedPath.slice(BASE_PATH.length)}`;
   }
 
   return `${SITE_URL}${normalizedPath}`;
