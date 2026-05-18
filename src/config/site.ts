@@ -16,12 +16,12 @@ export const BASE_PATH =
     ? `/${removeLeadingAndTrailingSlashes(rawBasePath)}`
     : '';
 
-const explicitSiteUrl =
+const envSiteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? process.env.NEXT_PUBLIC_URL;
-// SITE_URL の優先順位:
-// 1) NEXT_PUBLIC_SITE_URL / NEXT_PUBLIC_URL があればそれを使用
-// 2) 未指定時は GitHub Pages 向けの既定URLを生成
 const defaultSitePath = BASE_PATH || `/${REPOSITORY_NAME}`;
 const defaultSiteUrl = `https://${GITHUB_USERNAME}.github.io${defaultSitePath}`;
 
-export const SITE_URL = removeTrailingSlash(explicitSiteUrl ?? defaultSiteUrl);
+// SITE_URL の優先順位:
+// 1) NEXT_PUBLIC_SITE_URL / NEXT_PUBLIC_URL
+// 2) GitHub Pages向け既定URL
+export const SITE_URL = removeTrailingSlash(envSiteUrl ?? defaultSiteUrl);

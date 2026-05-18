@@ -10,7 +10,7 @@ const escapeXml = (value: string): string =>
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&apos;');
 
-const toRfc2822Date = (date: string): string => {
+const toRssCompatibleDate = (date: string): string => {
   const parsedDate = new Date(`${date}T00:00:00Z`);
 
   if (Number.isNaN(parsedDate.getTime())) {
@@ -24,7 +24,7 @@ export const createRssXml = (posts: readonly PostSummary[]): string => {
   const items = posts
     .map((post) => {
       const link = `${SITE_URL}${paths.post.getHref(post.slug)}`;
-      const pubDate = toRfc2822Date(post.meta.updatedAt);
+      const pubDate = toRssCompatibleDate(post.meta.updatedAt);
 
       return [
         '    <item>',

@@ -7,10 +7,16 @@ import { createRssXml } from '../src/features/blog/lib/rss';
 const outDir = path.resolve(process.cwd(), 'out');
 const outputPath = path.join(outDir, 'rss.xml');
 
-const posts = getAllPostSummaries();
-const rssXml = createRssXml(posts);
+try {
+  const posts = getAllPostSummaries();
+  const rssXml = createRssXml(posts);
 
-mkdirSync(outDir, { recursive: true });
-writeFileSync(outputPath, rssXml, 'utf-8');
+  mkdirSync(outDir, { recursive: true });
+  writeFileSync(outputPath, rssXml, 'utf-8');
 
-console.info(`Generated: ${outputPath}`);
+  console.info(`Generated: ${outputPath}`);
+} catch (error) {
+  const message = error instanceof Error ? error.message : String(error);
+  console.error(`Failed to generate RSS feed at ${outputPath}: ${message}`);
+  process.exit(1);
+}

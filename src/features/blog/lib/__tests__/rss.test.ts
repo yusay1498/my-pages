@@ -3,6 +3,14 @@ import { describe, expect, it } from 'vitest';
 import { createRssXml } from '@/features/blog/lib/rss';
 
 describe('createRssXml', () => {
+  it('記事がない場合でも有効なRSS XMLを生成する', () => {
+    const xml = createRssXml([]);
+
+    expect(xml).toContain('<rss version="2.0">');
+    expect(xml).toContain('<channel>');
+    expect(xml).not.toContain('<item>');
+  });
+
   it('記事リストからRSS XMLを生成する', () => {
     const xml = createRssXml([
       {
