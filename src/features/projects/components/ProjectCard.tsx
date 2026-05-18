@@ -1,8 +1,8 @@
 import { ExternalLink, GitFork, Star } from 'lucide-react';
 
-import type { ProjectCard as ProjectCardType } from '@/features/projects/types';
-
 import { LanguageBadge } from './LanguageBadge';
+
+import type { ProjectCard as ProjectCardType } from '@/features/projects/types';
 
 const ALLOWED_PROTOCOLS = new Set(['http:', 'https:']);
 
