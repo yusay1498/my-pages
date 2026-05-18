@@ -73,6 +73,26 @@ describe('getAllPublishedTagsFromSummaries', () => {
       'React',
     ]);
   });
+
+  it('前後に空白を含むタグをトリミングして追加する', () => {
+    const summariesWithSpacedTags: PostSummary[] = [
+      {
+        slug: 'post-e',
+        meta: {
+          title: 'Post E',
+          description: 'E',
+          tags: [' React ', ' TypeScript'],
+          createdAt: '2026-01-09',
+          updatedAt: '2026-01-10',
+          status: 'published',
+        },
+      },
+    ];
+    expect(getAllPublishedTagsFromSummaries(summariesWithSpacedTags)).toEqual([
+      'React',
+      'TypeScript',
+    ]);
+  });
 });
 
 describe('getPostSummariesByTagFromSummaries', () => {
@@ -95,5 +115,26 @@ describe('getPostSummariesByTagFromSummaries', () => {
     expect(getPostSummariesByTagFromSummaries(postSummaries, 'react')).toEqual(
       [],
     );
+  });
+
+  it('前後に空白を含むタグでも正規化して一致判定する', () => {
+    const summaryWithSpacedTag: PostSummary[] = [
+      {
+        slug: 'post-e',
+        meta: {
+          title: 'Post E',
+          description: 'E',
+          tags: [' React '],
+          createdAt: '2026-01-09',
+          updatedAt: '2026-01-10',
+          status: 'published',
+        },
+      },
+    ];
+    expect(
+      getPostSummariesByTagFromSummaries(summaryWithSpacedTag, 'React').map(
+        (item) => item.slug,
+      ),
+    ).toEqual(['post-e']);
   });
 });

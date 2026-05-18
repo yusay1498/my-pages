@@ -39,7 +39,7 @@ export async function generateMetadata({
   params,
 }: PageParams): Promise<Metadata> {
   const { tag } = await params;
-  getTagPageData(tag);
+  void getTagPageData(tag);
 
   const title = `${tag} の記事一覧 - ${SITE_TITLE}`;
   const description = `タグ「${tag}」の記事一覧ページです。`;

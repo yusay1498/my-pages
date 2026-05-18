@@ -132,8 +132,9 @@ export const getAllPublishedTagsFromSummaries = (
 
   postSummaries.forEach((summary) => {
     summary.meta.tags.forEach((tag) => {
-      if (tag.trim().length > 0) {
-        uniqueTags.add(tag);
+      const trimmed = tag.trim();
+      if (trimmed.length > 0) {
+        uniqueTags.add(trimmed);
       }
     });
   });
@@ -145,7 +146,9 @@ export const getPostSummariesByTagFromSummaries = (
   postSummaries: readonly PostSummary[],
   tag: string,
 ): PostSummary[] => {
-  return postSummaries.filter((summary) => summary.meta.tags.includes(tag));
+  return postSummaries.filter((summary) =>
+    summary.meta.tags.some((t) => t.trim() === tag),
+  );
 };
 
 export const getAllPublishedTags = (): string[] => {
