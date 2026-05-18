@@ -47,4 +47,22 @@ describe('createRssXml', () => {
       '<description>Use &quot;quote&quot; and &apos;apostrophe&apos;</description>',
     );
   });
+
+  it('無効な日付が含まれる場合はエラーを投げる', () => {
+    expect(() =>
+      createRssXml([
+        {
+          slug: 'invalid-date',
+          meta: {
+            title: 'Invalid',
+            description: 'Invalid date',
+            tags: [],
+            createdAt: '2025-01-01',
+            updatedAt: '2025-13-01',
+            status: 'published',
+          },
+        },
+      ]),
+    ).toThrow('Invalid RSS date: 2025-13-01');
+  });
 });

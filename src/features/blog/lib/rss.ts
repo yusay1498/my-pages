@@ -10,8 +10,15 @@ const escapeXml = (value: string): string =>
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&apos;');
 
-const toRfc2822Date = (date: string): string =>
-  new Date(`${date}T00:00:00Z`).toUTCString();
+const toRfc2822Date = (date: string): string => {
+  const parsedDate = new Date(`${date}T00:00:00Z`);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    throw new Error(`Invalid RSS date: ${date}`);
+  }
+
+  return parsedDate.toUTCString();
+};
 
 export const createRssXml = (posts: readonly PostSummary[]): string => {
   const items = posts

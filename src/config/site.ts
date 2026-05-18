@@ -1,6 +1,8 @@
 /** サイト全体で共有する設定値 */
-const trimSlashes = (value: string): string => value.replace(/^\/+|\/+$/g, '');
-const trimTrailingSlash = (value: string): string => value.replace(/\/+$/g, '');
+const removeLeadingAndTrailingSlashes = (value: string): string =>
+  value.replace(/^\/+|\/+$/g, '');
+const removeTrailingSlash = (value: string): string =>
+  value.replace(/\/+$/g, '');
 
 export const SITE_TITLE = "Yusay's TIL";
 export const SITE_DESCRIPTION = '個人の学習アウトプットブログ';
@@ -10,11 +12,16 @@ export const REPOSITORY_NAME =
 
 const rawBasePath = process.env.NEXT_PUBLIC_BASE_PATH;
 export const BASE_PATH =
-  rawBasePath && rawBasePath !== '/' ? `/${trimSlashes(rawBasePath)}` : '';
+  rawBasePath && rawBasePath !== '/'
+    ? `/${removeLeadingAndTrailingSlashes(rawBasePath)}`
+    : '';
 
 const explicitSiteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? process.env.NEXT_PUBLIC_URL;
+// SITE_URL の優先順位:
+// 1) NEXT_PUBLIC_SITE_URL / NEXT_PUBLIC_URL があればそれを使用
+// 2) 未指定時は GitHub Pages 向けの既定URLを生成
 const defaultSitePath = BASE_PATH || `/${REPOSITORY_NAME}`;
 const defaultSiteUrl = `https://${GITHUB_USERNAME}.github.io${defaultSitePath}`;
 
-export const SITE_URL = trimTrailingSlash(explicitSiteUrl ?? defaultSiteUrl);
+export const SITE_URL = removeTrailingSlash(explicitSiteUrl ?? defaultSiteUrl);
