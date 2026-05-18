@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import { AppProvider } from '@/app/provider';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
+import { paths } from '@/config/paths';
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from '@/config/site';
 import { OGP_IMAGE_SIZE } from '@/features/seo/lib/og-image';
 
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
     images: [
       {
-        url: '/opengraph-image.png',
+        url: paths.home.getOgpImageHref(),
         width: OGP_IMAGE_SIZE.width,
         height: OGP_IMAGE_SIZE.height,
       },
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    images: ['/opengraph-image.png'],
+    images: [paths.home.getOgpImageHref()],
   },
 };
 

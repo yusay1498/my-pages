@@ -7,6 +7,10 @@ describe('paths', () => {
     it('ルートパスを返す', () => {
       expect(paths.home.getHref()).toBe('/');
     });
+
+    it('ホームのOGP画像パスを返す', () => {
+      expect(paths.home.getOgpImageHref()).toBe('/opengraph-image.png');
+    });
   });
 
   describe('post', () => {
@@ -25,6 +29,12 @@ describe('paths', () => {
         `/posts/${encodeURIComponent('hello world/test')}`,
       );
     });
+
+    it('スラッグからポストのOGP画像パスを生成する', () => {
+      expect(paths.post.getOgpImageHref('my-first-post')).toBe(
+        '/posts/my-first-post/opengraph-image.png',
+      );
+    });
   });
 
   describe('rss', () => {
@@ -36,6 +46,12 @@ describe('paths', () => {
   describe('projects', () => {
     it('プロジェクトページのパスを返す', () => {
       expect(paths.projects.getHref()).toBe('/projects');
+    });
+
+    it('ProjectsのOGP画像パスを返す', () => {
+      expect(paths.projects.getOgpImageHref()).toBe(
+        '/projects/opengraph-image.png',
+      );
     });
   });
 });

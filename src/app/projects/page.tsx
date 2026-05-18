@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { paths } from '@/config/paths';
 import { PROJECTS_DESCRIPTION, PROJECTS_TITLE } from '@/config/site';
 import ProjectCard from '@/features/projects/components/ProjectCard';
 import { fetchPublicRepositories } from '@/features/projects/lib/github';
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
     url: '/projects',
     images: [
       {
-        url: '/projects/opengraph-image.png',
+        url: paths.projects.getOgpImageHref(),
         width: OGP_IMAGE_SIZE.width,
         height: OGP_IMAGE_SIZE.height,
       },
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: PROJECTS_TITLE,
     description: PROJECTS_DESCRIPTION,
-    images: ['/projects/opengraph-image.png'],
+    images: [paths.projects.getOgpImageHref()],
   },
 };
 

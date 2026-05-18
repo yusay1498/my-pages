@@ -51,7 +51,7 @@ export async function generateMetadata({
       siteName: SITE_TITLE,
       images: [
         {
-          url: `${paths.post.getHref(slug)}/opengraph-image.png`,
+          url: paths.post.getOgpImageHref(slug),
           width: OGP_IMAGE_SIZE.width,
           height: OGP_IMAGE_SIZE.height,
         },
@@ -61,7 +61,7 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title: meta.title,
       description: meta.description,
-      images: [`${paths.post.getHref(slug)}/opengraph-image.png`],
+      images: [paths.post.getOgpImageHref(slug)],
     },
   };
 }

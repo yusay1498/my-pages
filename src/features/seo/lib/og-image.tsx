@@ -9,7 +9,13 @@ export const OGP_IMAGE_SIZE = {
 
 export const OGP_IMAGE_CONTENT_TYPE = 'image/png';
 
-type OgpImageInput = {
+const OGP_GRADIENT =
+  'linear-gradient(135deg, rgb(17, 24, 39), rgb(31, 41, 55) 45%, rgb(59, 130, 246))';
+const OGP_IMAGE_PADDING = '56px';
+const OGP_IMAGE_FONT_FAMILY =
+  'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+
+type CreateOgpImageInput = {
   readonly title: string;
   readonly description: string;
 };
@@ -17,21 +23,19 @@ type OgpImageInput = {
 export const createOgpImage = ({
   title,
   description,
-}: OgpImageInput): ImageResponse => {
+}: CreateOgpImageInput): ImageResponse => {
   return new ImageResponse(
     <div
       style={{
         display: 'flex',
         width: '100%',
         height: '100%',
-        background:
-          'linear-gradient(135deg, rgb(17, 24, 39), rgb(31, 41, 55) 45%, rgb(59, 130, 246))',
+        background: OGP_GRADIENT,
         color: 'white',
-        padding: '56px',
+        padding: OGP_IMAGE_PADDING,
         flexDirection: 'column',
         justifyContent: 'space-between',
-        fontFamily:
-          'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+        fontFamily: OGP_IMAGE_FONT_FAMILY,
       }}
     >
       <div

@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     url: paths.home.getHref(),
     images: [
       {
-        url: '/opengraph-image.png',
+        url: paths.home.getOgpImageHref(),
         width: OGP_IMAGE_SIZE.width,
         height: OGP_IMAGE_SIZE.height,
       },
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    images: ['/opengraph-image.png'],
+    images: [paths.home.getOgpImageHref()],
   },
 };
 
