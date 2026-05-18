@@ -20,7 +20,7 @@ export const SearchDialog = ({ isOpen, onClose }: SearchDialogProps) => {
     if (isOpen) {
       loadIndex();
       dialogRef.current?.showModal();
-      // 少し待ってからフォーカス（ダイアログのアニメーション対応）
+      // showModal() 直後は DOM 更新が反映されていないため次フレームでフォーカス
       requestAnimationFrame(() => {
         inputRef.current?.focus();
       });

@@ -22,40 +22,46 @@ export const useSearch = () => {
     results: [],
     error: null,
   });
+  const [isReady, setIsReady] = useState(false);
   const searcherRef = useRef<ReturnType<typeof createSearcher> | null>(null);
-  const indexLoadedRef = useRef(false);
+  const loadingPromiseRef = useRef<Promise<void> | null>(null);
 
   const loadIndex = useCallback(async () => {
-    if (indexLoadedRef.current) return;
-    indexLoadedRef.current = true;
+    if (loadingPromiseRef.current) return loadingPromiseRef.current;
 
-    setState((prev) => ({ ...prev, isLoading: true, error: null }));
+    const promise = (async () => {
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
-    try {
-      const response = await fetch(`${BASE_PATH}/search-index.json`);
-      if (!response.ok) {
-        throw new Error('検索インデックスの読み込みに失敗しました');
+      try {
+        const response = await fetch(`${BASE_PATH}/search-index.json`);
+        if (!response.ok) {
+          throw new Error('検索インデックスの読み込みに失敗しました');
+        }
+
+        const index: SearchIndexEntry[] = await response.json();
+        searcherRef.current = createSearcher(index);
+        setIsReady(true);
+        setState((prev) => ({ ...prev, isLoading: false }));
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        setState({ isLoading: false, results: [], error: message });
+        loadingPromiseRef.current = null;
       }
+    })();
 
-      const index: SearchIndexEntry[] = await response.json();
-      searcherRef.current = createSearcher(index);
-      setState((prev) => ({ ...prev, isLoading: false }));
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      setState({ isLoading: false, results: [], error: message });
-      indexLoadedRef.current = false;
-    }
+    loadingPromiseRef.current = promise;
+    return promise;
   }, []);
 
   useEffect(() => {
-    if (!searcherRef.current || query.trim().length === 0) {
+    if (!isReady || !searcherRef.current || query.trim().length === 0) {
       setState((prev) => ({ ...prev, results: [] }));
       return;
     }
 
     const results = searcherRef.current.search(query);
     setState((prev) => ({ ...prev, results }));
-  }, [query]);
+  }, [query, isReady]);
 
   return {
     query,
