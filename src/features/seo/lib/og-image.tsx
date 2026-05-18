@@ -14,7 +14,7 @@ type OgpImageInput = {
   readonly description: string;
 };
 
-export const createOgpImageResponse = ({
+export const createOgpImage = ({
   title,
   description,
 }: OgpImageInput): ImageResponse => {

@@ -6,6 +6,7 @@ import { paths } from '@/config/paths';
 import { SITE_TITLE } from '@/config/site';
 import ArticleSection from '@/features/blog/components/ArticleSection';
 import TableOfContents from '@/features/blog/components/TableOfContents';
+import { PLACEHOLDER_SLUG } from '@/features/blog/lib/constants';
 import { extractTocItems } from '@/features/blog/lib/heading';
 import {
   getAllSlugs,
@@ -15,7 +16,6 @@ import {
 import { OGP_IMAGE_SIZE } from '@/features/seo/lib/og-image';
 
 export const dynamicParams = false;
-const PLACEHOLDER_SLUG = '__placeholder__';
 
 export async function generateStaticParams() {
   const slugs = getAllSlugs();

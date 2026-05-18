@@ -1,18 +1,17 @@
 import { notFound } from 'next/navigation';
 
+import { PLACEHOLDER_SLUG } from '@/features/blog/lib/constants';
 import { getAllSlugs, getPostMetaBySlug } from '@/features/blog/lib/posts';
 import {
   OGP_IMAGE_CONTENT_TYPE,
   OGP_IMAGE_SIZE,
-  createOgpImageResponse,
+  createOgpImage,
 } from '@/features/seo/lib/og-image';
 
 export const size = OGP_IMAGE_SIZE;
 export const contentType = OGP_IMAGE_CONTENT_TYPE;
 export const dynamicParams = false;
 export const dynamic = 'force-static';
-
-const PLACEHOLDER_SLUG = '__placeholder__';
 
 export async function generateStaticParams() {
   const slugs = getAllSlugs();
@@ -34,7 +33,7 @@ const OpengraphImage = async ({ params }: OgpImageParams) => {
     notFound();
   }
 
-  return createOgpImageResponse({
+  return createOgpImage({
     title: meta.title,
     description: meta.description,
   });

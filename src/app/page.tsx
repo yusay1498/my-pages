@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { paths } from '@/config/paths';
 import { SITE_DESCRIPTION, SITE_TITLE } from '@/config/site';
 import PostCard from '@/features/blog/components/PostCard';
 import { getAllPostSummaries } from '@/features/blog/lib/posts';
@@ -10,12 +11,12 @@ export const metadata: Metadata = {
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
   alternates: {
-    canonical: '/',
+    canonical: paths.home.getHref(),
   },
   openGraph: {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    url: '/',
+    url: paths.home.getHref(),
     images: [
       {
         url: '/opengraph-image.png',
