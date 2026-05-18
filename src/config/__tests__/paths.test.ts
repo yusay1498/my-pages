@@ -54,4 +54,22 @@ describe('paths', () => {
       );
     });
   });
+
+  describe('tag', () => {
+    it('タグからタグページパスを生成する', () => {
+      expect(paths.tag.getHref('TypeScript')).toBe('/tags/TypeScript');
+    });
+
+    it('日本語タグをエンコードする', () => {
+      expect(paths.tag.getHref('初心者向け')).toBe(
+        `/tags/${encodeURIComponent('初心者向け')}`,
+      );
+    });
+
+    it('特殊文字を含むタグをエンコードする', () => {
+      expect(paths.tag.getHref('A/B test')).toBe(
+        `/tags/${encodeURIComponent('A/B test')}`,
+      );
+    });
+  });
 });

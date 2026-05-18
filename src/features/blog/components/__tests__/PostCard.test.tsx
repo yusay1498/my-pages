@@ -65,8 +65,19 @@ describe('PostCard', () => {
   it('記事へのリンクが正しいhrefを持つ', () => {
     render(<PostCard post={createPost()} />);
 
-    const link = screen.getByRole('link');
-    expect(link.getAttribute('href')).toBe('/posts/test-post');
+    const links = screen.getAllByRole('link');
+    expect(
+      links.some((link) => link.getAttribute('href') === '/posts/test-post'),
+    ).toBe(true);
+  });
+
+  it('タグリンクが正しいhrefを持つ', () => {
+    render(<PostCard post={createPost()} />);
+
+    const typeScriptLink = screen.getByRole('link', {
+      name: 'タグ「TypeScript」の記事一覧を見る',
+    });
+    expect(typeScriptLink.getAttribute('href')).toBe('/tags/TypeScript');
   });
 
   it('タグが空の場合はリスト内に項目がない', () => {

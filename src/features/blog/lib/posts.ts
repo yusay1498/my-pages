@@ -3,6 +3,7 @@ import path from 'node:path';
 
 import { z } from 'zod';
 
+import { TAG_SORT_LOCALE } from '@/features/blog/lib/constants';
 import type {
   Article,
   Post,
@@ -122,6 +123,40 @@ export const getAllPostSummaries = (): PostSummary[] => {
     })
     .filter((summary): summary is PostSummary => summary !== null)
     .sort((a, b) => b.meta.updatedAt.localeCompare(a.meta.updatedAt));
+};
+
+export const getAllPublishedTagsFromSummaries = (
+  postSummaries: readonly PostSummary[],
+): string[] => {
+  const uniqueTags = new Set<string>();
+
+  postSummaries.forEach((summary) => {
+    summary.meta.tags.forEach((tag) => {
+      const trimmed = tag.trim();
+      if (trimmed.length > 0) {
+        uniqueTags.add(trimmed);
+      }
+    });
+  });
+
+  return [...uniqueTags].sort((a, b) => a.localeCompare(b, TAG_SORT_LOCALE));
+};
+
+export const getPostSummariesByTagFromSummaries = (
+  postSummaries: readonly PostSummary[],
+  tag: string,
+): PostSummary[] => {
+  return postSummaries.filter((summary) =>
+    summary.meta.tags.some((t) => t.trim() === tag),
+  );
+};
+
+export const getAllPublishedTags = (): string[] => {
+  return getAllPublishedTagsFromSummaries(getAllPostSummaries());
+};
+
+export const getPostSummariesByTag = (tag: string): PostSummary[] => {
+  return getPostSummariesByTagFromSummaries(getAllPostSummaries(), tag);
 };
 
 export const getAllPosts = (): Post[] => {
