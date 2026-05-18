@@ -1,7 +1,7 @@
+import { SITE_DESCRIPTION, SITE_TITLE } from '@/config/site';
 import PostCard from '@/features/blog/components/PostCard';
 import { getAllPostSummaries } from '@/features/blog/lib/posts';
 import LinksSection from '@/features/portfolio/components/LinksSection';
-import { SITE_DESCRIPTION, SITE_TITLE } from '@/config/site';
 
 const HomePage = () => {
   const posts = getAllPostSummaries();
