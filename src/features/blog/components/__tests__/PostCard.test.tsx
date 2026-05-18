@@ -74,7 +74,9 @@ describe('PostCard', () => {
   it('タグリンクが正しいhrefを持つ', () => {
     render(<PostCard post={createPost()} />);
 
-    const typeScriptLink = screen.getByRole('link', { name: 'TypeScript' });
+    const typeScriptLink = screen.getByRole('link', {
+      name: 'タグ「TypeScript」の記事一覧を見る',
+    });
     expect(typeScriptLink.getAttribute('href')).toBe('/tags/TypeScript');
   });
 

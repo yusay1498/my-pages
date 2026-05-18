@@ -1,2 +1,2 @@
 export const PLACEHOLDER_SLUG = '__placeholder__';
-export const PLACEHOLDER_TAG = '__placeholder-tag__';
+export const TAG_SORT_LOCALE = 'ja-JP';

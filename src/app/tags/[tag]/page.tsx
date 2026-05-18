@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { cache } from 'react';
 
 import { paths } from '@/config/paths';
 import {
@@ -9,7 +10,6 @@ import {
   toAbsoluteSiteUrl,
 } from '@/config/site';
 import PostCard from '@/features/blog/components/PostCard';
-import { PLACEHOLDER_TAG } from '@/features/blog/lib/constants';
 import {
   getAllPublishedTags,
   getPostSummariesByTag,
@@ -17,34 +17,42 @@ import {
 
 export const dynamicParams = false;
 
-const decodeTagParam = (tag: string): string => {
+const decodeTagParam = (tag: string): string | null => {
   try {
     return decodeURIComponent(tag);
   } catch {
-    return tag;
+    return null;
   }
 };
 
 export async function generateStaticParams() {
   const tags = getAllPublishedTags();
 
-  return tags.length > 0
-    ? tags.map((tag) => ({ tag }))
-    : [{ tag: PLACEHOLDER_TAG }];
+  return tags.map((tag) => ({ tag }));
 }
 
 type PageParams = { params: Promise<{ tag: string }> };
 
-export async function generateMetadata({
-  params,
-}: PageParams): Promise<Metadata> {
-  const { tag } = await params;
+const getTagPageData = cache((tag: string) => {
   const decodedTag = decodeTagParam(tag);
+  if (!decodedTag) {
+    notFound();
+  }
+
   const posts = getPostSummariesByTag(decodedTag);
 
   if (posts.length === 0) {
     notFound();
   }
+
+  return { decodedTag, posts };
+});
+
+export async function generateMetadata({
+  params,
+}: PageParams): Promise<Metadata> {
+  const { tag } = await params;
+  const { decodedTag } = getTagPageData(tag);
 
   const title = `${decodedTag} の記事一覧 - ${SITE_TITLE}`;
   const description = `タグ「${decodedTag}」の記事一覧ページです。`;
@@ -73,12 +81,7 @@ export async function generateMetadata({
 
 const TagPage = async ({ params }: PageParams) => {
   const { tag } = await params;
-  const decodedTag = decodeTagParam(tag);
-  const posts = getPostSummariesByTag(decodedTag);
-
-  if (posts.length === 0) {
-    notFound();
-  }
+  const { decodedTag, posts } = getTagPageData(tag);
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-12">

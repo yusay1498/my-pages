@@ -98,7 +98,11 @@ export default async function PostPage({ params }: PageParams) {
               key={tag}
               className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-200"
             >
-              <Link href={paths.tag.getHref(tag)} className="hover:underline">
+              <Link
+                href={paths.tag.getHref(tag)}
+                className="hover:underline"
+                aria-label={`タグ「${tag}」の記事一覧を見る`}
+              >
                 {tag}
               </Link>
             </li>

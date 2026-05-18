@@ -3,6 +3,7 @@ import path from 'node:path';
 
 import { z } from 'zod';
 
+import { TAG_SORT_LOCALE } from '@/features/blog/lib/constants';
 import type {
   Article,
   Post,
@@ -135,7 +136,7 @@ export const getAllPublishedTagsFromSummaries = (
     });
   });
 
-  return [...uniqueTags].sort((a, b) => a.localeCompare(b));
+  return [...uniqueTags].sort((a, b) => a.localeCompare(b, TAG_SORT_LOCALE));
 };
 
 export const getPostSummariesByTagFromSummaries = (
