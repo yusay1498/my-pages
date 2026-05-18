@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { Fragment } from 'react';
 
 import { paths } from '@/config/paths';
-import { SITE_TITLE } from '@/config/site';
+import { SITE_TITLE, toAbsoluteSiteUrl } from '@/config/site';
 import ArticleSection from '@/features/blog/components/ArticleSection';
 import TableOfContents from '@/features/blog/components/TableOfContents';
 import { PLACEHOLDER_SLUG } from '@/features/blog/lib/constants';
@@ -41,17 +41,18 @@ export async function generateMetadata({
     title: meta.title,
     description: meta.description,
     alternates: {
-      canonical: paths.post.getHref(slug),
+      canonical: toAbsoluteSiteUrl(paths.post.getHref(slug)),
     },
     openGraph: {
       type: 'article',
+      locale: 'ja_JP',
       title: meta.title,
       description: meta.description,
-      url: paths.post.getHref(slug),
+      url: toAbsoluteSiteUrl(paths.post.getHref(slug)),
       siteName: SITE_TITLE,
       images: [
         {
-          url: paths.post.getOgpImageHref(slug),
+          url: toAbsoluteSiteUrl(paths.post.getOgpImageHref(slug)),
           width: OGP_IMAGE_SIZE.width,
           height: OGP_IMAGE_SIZE.height,
         },
@@ -61,7 +62,7 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title: meta.title,
       description: meta.description,
-      images: [paths.post.getOgpImageHref(slug)],
+      images: [toAbsoluteSiteUrl(paths.post.getOgpImageHref(slug))],
     },
   };
 }

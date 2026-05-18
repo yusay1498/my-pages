@@ -55,3 +55,14 @@ if (!/^https?:\/\//.test(normalizedSiteUrl)) {
 // 2) NEXT_PUBLIC_URL（互換用のフォールバックURL）
 // 3) GitHub Pages向け既定URL
 export const SITE_URL = normalizedSiteUrl;
+
+/**
+ * サイト配信URL（basePathを含む）を基準に絶対URLを組み立てます。
+ *
+ * @param path 先頭スラッシュ付きのパス
+ * @returns 絶対URL
+ */
+export const toAbsoluteSiteUrl = (path: string): string => {
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return `${SITE_URL}${normalizedPath}`;
+};

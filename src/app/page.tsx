@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { paths } from '@/config/paths';
-import { SITE_DESCRIPTION, SITE_TITLE } from '@/config/site';
+import { SITE_DESCRIPTION, SITE_TITLE, toAbsoluteSiteUrl } from '@/config/site';
 import PostCard from '@/features/blog/components/PostCard';
 import { getAllPostSummaries } from '@/features/blog/lib/posts';
 import LinksSection from '@/features/portfolio/components/LinksSection';
@@ -11,15 +11,18 @@ export const metadata: Metadata = {
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
   alternates: {
-    canonical: paths.home.getHref(),
+    canonical: toAbsoluteSiteUrl(paths.home.getHref()),
   },
   openGraph: {
+    type: 'website',
+    locale: 'ja_JP',
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    url: paths.home.getHref(),
+    siteName: SITE_TITLE,
+    url: toAbsoluteSiteUrl(paths.home.getHref()),
     images: [
       {
-        url: paths.home.getOgpImageHref(),
+        url: toAbsoluteSiteUrl(paths.home.getOgpImageHref()),
         width: OGP_IMAGE_SIZE.width,
         height: OGP_IMAGE_SIZE.height,
       },
@@ -29,7 +32,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    images: [paths.home.getOgpImageHref()],
+    images: [toAbsoluteSiteUrl(paths.home.getOgpImageHref())],
   },
 };
 

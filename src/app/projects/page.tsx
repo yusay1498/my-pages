@@ -1,7 +1,12 @@
 import type { Metadata } from 'next';
 
 import { paths } from '@/config/paths';
-import { PROJECTS_DESCRIPTION, PROJECTS_TITLE } from '@/config/site';
+import {
+  PROJECTS_DESCRIPTION,
+  PROJECTS_TITLE,
+  SITE_TITLE,
+  toAbsoluteSiteUrl,
+} from '@/config/site';
 import ProjectCard from '@/features/projects/components/ProjectCard';
 import { fetchPublicRepositories } from '@/features/projects/lib/github';
 import { OGP_IMAGE_SIZE } from '@/features/seo/lib/og-image';
@@ -10,15 +15,18 @@ export const metadata: Metadata = {
   title: PROJECTS_TITLE,
   description: PROJECTS_DESCRIPTION,
   alternates: {
-    canonical: paths.projects.getHref(),
+    canonical: toAbsoluteSiteUrl(paths.projects.getHref()),
   },
   openGraph: {
+    type: 'website',
+    locale: 'ja_JP',
     title: PROJECTS_TITLE,
     description: PROJECTS_DESCRIPTION,
-    url: paths.projects.getHref(),
+    siteName: SITE_TITLE,
+    url: toAbsoluteSiteUrl(paths.projects.getHref()),
     images: [
       {
-        url: paths.projects.getOgpImageHref(),
+        url: toAbsoluteSiteUrl(paths.projects.getOgpImageHref()),
         width: OGP_IMAGE_SIZE.width,
         height: OGP_IMAGE_SIZE.height,
       },
@@ -28,7 +36,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: PROJECTS_TITLE,
     description: PROJECTS_DESCRIPTION,
-    images: [paths.projects.getOgpImageHref()],
+    images: [toAbsoluteSiteUrl(paths.projects.getOgpImageHref())],
   },
 };
 
