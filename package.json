@@ -5,13 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build && npm run generate:rss",
+    "build": "next build && npm run generate:rss && npm run generate:search-index",
     "start": "next start",
     "test": "vitest run",
     "lint": "eslint src",
     "prepare": "husky",
     "check-types": "tsc --project tsconfig.json --pretty --noEmit",
-    "generate:rss": "tsx scripts/generate-rss.ts"
+    "generate:rss": "tsx scripts/generate-rss.ts",
+    "generate:search-index": "tsx scripts/generate-search-index.ts"
   },
   "dependencies": {
     "@next/env": "^16.2.6",
@@ -20,6 +21,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.11",
+    "fuse.js": "^7.0.0",
     "isomorphic-dompurify": "^2.20.0",
     "lucide-react": "^1.16.0",
     "marked": "^18.0.3",
