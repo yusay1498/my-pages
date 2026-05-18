@@ -92,7 +92,7 @@ my-pages/
 
 ### ディレクトリ設計方針
 
-ディレクトリ構成は [bulletproof-react](https://github.com/alan2207/bulletproof-react) のプロジェクト構造を参考にしています。feature ベースでモジュールを分離し、各 feature が独自の components / lib / types を持つことでスケーラブルな構成を実現しています。
+ディレクトリ構成は [bulletproof-react](https://github.com/alan2207/bulletproof-react) のプロジェクト構造を参考にしています。feature ベースでモジュールを分離し、各機能の凝集度を高める設計です。
 
 | ディレクトリ | 役割 |
 |---|---|
@@ -191,7 +191,7 @@ my-pages/
 - fork・archived は除外
 - カード形式で一覧表示（リポジトリ名、説明、言語、スター数、フォーク数、トピック、更新日）
 - `GITHUB_TOKEN` 環境変数で API レート制限を緩和（GitHub Actions では自動提供）
-- API が利用不可の場合はビルドを止めず空一覧を表示
+- API が��用不可の場合はビルドを止めず空一覧を表示
 
 ### テーマページ (`/posts/{slug}`)
 
@@ -244,7 +244,39 @@ my-pages/
 
 ### サイト機能
 
-- 全文検索
+- 全文検索（ビルド時にインデックス生成 → Pagefind or Fuse.js でクライアント側検索）
+- 記事の読了時間表示（日本語: 約500文字/分で推定）
+- 関連記事の表示（タグの類似度ベースでレコメンド）
+- コードブロックのコピーボタン（ワンクリックコピー + トースト通知）
+- シンタックスハイライト強化（Shiki への移行）
+- i18n 対応（英語版記事を `posts/en/` に配置して多言語化）
+
+### SEO / ディスカバラビリティ
+
+- サイトマップ自動生成（ビルド時に `out/sitemap.xml` を出力、RSS と同じパターン）
+- JSON-LD 構造化データ（`BlogPosting` スキーマを各記事に埋め込み → Google リッチリザルト対応）
+- canonical URL の設定（各ページに `<link rel="canonical">` を追加）
+
+### アナリティクス / フィードバック
+
+- アクセス解析（プライバシー重視: Plausible or Umami セルフホスト）
+- コメント機能（GitHub Discussions ベースの giscus を導入）
+- 「役に立った」ボタン（GitHub API で Issue にリアクションを付ける簡易フィードバック）
+
+### パフォーマンス / DX
+
+- Lighthouse CI（GitHub Actions で毎回スコア計測、閾値未満で警告）
+- 画像の自動最適化（sharp でビルド時にリサイズ + WebP/AVIF 変換）
+- プレビュー環境（PR ごとにプレビューデプロイ: Cloudflare Pages or Vercel）
+- 記事テンプレート CLI（`npm run new-post <slug>` でディレクトリ + meta.json を自動生成）
+- Markdown リンク切れチェック（ビルド時 or CI で内部リンクの死活監視）
+
+### 学習・ポートフォリオ拡張
+
+- TIL カレンダー（GitHub の草のように記事投稿日をヒートマップ表示）
+- 学習ロードマップ（Mermaid で技術学習の進捗を可視化するページ）
+- スキルマトリクス（技術スタック × 習熟度をレーダーチャートやバッジで表示）
+- 読書ログ / 資格ログ（技術書や資格の記録を別 feature として管理）
 
 ### API Playground（Java学習用）
 
