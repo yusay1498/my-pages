@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Fragment } from 'react';
 
-import { SITE_TITLE } from '@/config/site';
 import { paths } from '@/config/paths';
+import { SITE_TITLE } from '@/config/site';
 import ArticleSection from '@/features/blog/components/ArticleSection';
 import TableOfContents from '@/features/blog/components/TableOfContents';
 import { extractTocItems } from '@/features/blog/lib/heading';

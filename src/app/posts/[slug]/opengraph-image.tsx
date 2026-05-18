@@ -1,15 +1,16 @@
 import { notFound } from 'next/navigation';
 
+import { getAllSlugs, getPostMetaBySlug } from '@/features/blog/lib/posts';
 import {
   OGP_IMAGE_CONTENT_TYPE,
   OGP_IMAGE_SIZE,
   createOgpImageResponse,
 } from '@/features/seo/lib/og-image';
-import { getAllSlugs, getPostMetaBySlug } from '@/features/blog/lib/posts';
 
 export const size = OGP_IMAGE_SIZE;
 export const contentType = OGP_IMAGE_CONTENT_TYPE;
 export const dynamicParams = false;
+export const dynamic = 'force-static';
 
 const PLACEHOLDER_SLUG = '__placeholder__';
 
