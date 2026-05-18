@@ -80,15 +80,17 @@ const ArticleSection = ({ article, headingIdMap }: ArticleSectionProps) => {
   let headingIndex = 0;
   const renderer = new marked.Renderer();
   renderer.html = () => '';
-  renderer.heading = (text: string, level: number) => {
-    if (level === 2 || level === 3) {
+  renderer.heading = ({ tokens, depth }) => {
+    const parser = renderer.parser ?? new marked.Parser();
+    const text = parser.parseInline(tokens);
+    if (depth === 2 || depth === 3) {
       const id =
         headingIdMap.get(`${article.number}:${headingIndex}`) ??
         generateHeadingId(text, article.number);
       headingIndex++;
-      return `<h${level} id="${id}">${text}</h${level}>`;
+      return `<h${depth} id="${id}">${text}</h${depth}>`;
     }
-    return `<h${level}>${text}</h${level}>`;
+    return `<h${depth}>${text}</h${depth}>`;
   };
 
   const segments = splitContentSegments(article.content);
