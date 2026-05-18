@@ -4,7 +4,8 @@ import path from 'node:path';
 import { getAllPostSummaries } from '@/features/blog/lib/posts';
 import { createRssXml } from '@/features/blog/lib/rss';
 
-const outDir = path.resolve(process.cwd(), 'out');
+const outputDir = process.env.NEXT_OUTPUT_DIR ?? 'out';
+const outDir = path.resolve(process.cwd(), outputDir);
 const outputPath = path.join(outDir, 'rss.xml');
 
 try {

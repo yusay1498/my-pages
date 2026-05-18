@@ -34,7 +34,7 @@ npm run dev
 
 - ビルド時（`npm run build`）に `out/rss.xml` を生成します。
 - 配信URLは `https://<GITHUB_USERNAME>.github.io/<REPOSITORY_NAME>/rss.xml` です。
-- 既定値の場合のURLは `https://yusay1498.github.io/my-pages/rss.xml` です。
+- 既定値（環境変数未設定時）のURLは `https://yusay1498.github.io/my-pages/rss.xml` です。
 
 ## ディレクトリ構成
 

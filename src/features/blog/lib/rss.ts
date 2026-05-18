@@ -10,7 +10,7 @@ const escapeXml = (value: string): string =>
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&apos;');
 
-const formatDateForRssPubDate = (date: string): string => {
+const formatRssDate = (date: string): string => {
   const parsedDate = new Date(`${date}T00:00:00Z`);
 
   if (Number.isNaN(parsedDate.getTime())) {
@@ -24,7 +24,7 @@ export const createRssXml = (posts: readonly PostSummary[]): string => {
   const items = posts
     .map((post) => {
       const link = `${SITE_URL}${paths.post.getHref(post.slug)}`;
-      const pubDate = formatDateForRssPubDate(post.meta.updatedAt);
+      const pubDate = formatRssDate(post.meta.updatedAt);
 
       return [
         '    <item>',
