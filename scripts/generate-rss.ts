@@ -1,8 +1,8 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
-import { getAllPostSummaries } from '../src/features/blog/lib/posts';
-import { createRssXml } from '../src/features/blog/lib/rss';
+import { getAllPostSummaries } from '@/features/blog/lib/posts';
+import { createRssXml } from '@/features/blog/lib/rss';
 
 const outDir = path.resolve(process.cwd(), 'out');
 const outputPath = path.join(outDir, 'rss.xml');

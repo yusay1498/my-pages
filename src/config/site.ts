@@ -1,6 +1,4 @@
 /** サイト全体で共有する設定値 */
-const removeLeadingAndTrailingSlashes = (value: string): string =>
-  value.replace(/^\/+|\/+$/g, '');
 const removeTrailingSlash = (value: string): string =>
   value.replace(/\/+$/g, '');
 
@@ -13,7 +11,7 @@ export const REPOSITORY_NAME =
 const rawBasePath = process.env.NEXT_PUBLIC_BASE_PATH;
 export const BASE_PATH =
   rawBasePath && rawBasePath !== '/'
-    ? `/${removeLeadingAndTrailingSlashes(rawBasePath)}`
+    ? `/${rawBasePath.replace(/^\/+|\/+$/g, '')}`
     : '';
 
 const envSiteUrl =
@@ -22,6 +20,7 @@ const defaultSitePath = BASE_PATH || `/${REPOSITORY_NAME}`;
 const defaultSiteUrl = `https://${GITHUB_USERNAME}.github.io${defaultSitePath}`;
 
 // SITE_URL の優先順位:
-// 1) NEXT_PUBLIC_SITE_URL / NEXT_PUBLIC_URL
-// 2) GitHub Pages向け既定URL
+// 1) NEXT_PUBLIC_SITE_URL（明示的な公開URL）
+// 2) NEXT_PUBLIC_URL（互換用のフォールバックURL）
+// 3) GitHub Pages向け既定URL
 export const SITE_URL = removeTrailingSlash(envSiteUrl ?? defaultSiteUrl);
