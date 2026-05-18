@@ -6,6 +6,8 @@ import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { paths } from '@/config/paths';
 import {
+  OPEN_GRAPH_LOCALE,
+  OPEN_GRAPH_TYPE_WEBSITE,
   SITE_DESCRIPTION,
   SITE_TITLE,
   SITE_URL,
@@ -20,12 +22,12 @@ export const metadata: Metadata = {
   description: SITE_DESCRIPTION,
   metadataBase: new URL(SITE_URL),
   openGraph: {
-    type: 'website',
-    locale: 'ja_JP',
+    type: OPEN_GRAPH_TYPE_WEBSITE,
+    locale: OPEN_GRAPH_LOCALE,
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     siteName: SITE_TITLE,
-    url: toAbsoluteSiteUrl(paths.home.getHref()),
+    url: SITE_URL,
     images: [
       {
         url: toAbsoluteSiteUrl(paths.home.getOgpImageHref()),

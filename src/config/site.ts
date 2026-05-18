@@ -28,6 +28,8 @@ const trimSlashes = (
 
 export const SITE_TITLE = "Yusay's TIL";
 export const SITE_DESCRIPTION = '個人の学習アウトプットブログ';
+export const OPEN_GRAPH_LOCALE = 'ja_JP';
+export const OPEN_GRAPH_TYPE_WEBSITE = 'website';
 export const PROJECTS_TITLE = `Projects - ${SITE_TITLE}`;
 export const PROJECTS_DESCRIPTION = 'パブリックリポジトリの一覧';
 export const GITHUB_USERNAME = process.env.GITHUB_USERNAME ?? 'yusay1498';
@@ -59,10 +61,19 @@ export const SITE_URL = normalizedSiteUrl;
 /**
  * サイト配信URL（basePathを含む）を基準に絶対URLを組み立てます。
  *
- * @param path 先頭スラッシュ付きのパス
+ * @param path basePath を含まない先頭スラッシュ付きのパス
  * @returns 絶対URL
  */
 export const toAbsoluteSiteUrl = (path: string): string => {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+
+  if (
+    BASE_PATH &&
+    (normalizedPath === BASE_PATH || normalizedPath.startsWith(`${BASE_PATH}/`))
+  ) {
+    const pathWithoutBasePath = normalizedPath.slice(BASE_PATH.length) || '/';
+    return `${SITE_URL}${pathWithoutBasePath}`;
+  }
+
   return `${SITE_URL}${normalizedPath}`;
 };

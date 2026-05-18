@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 
 import { paths } from '@/config/paths';
 import {
+  OPEN_GRAPH_LOCALE,
+  OPEN_GRAPH_TYPE_WEBSITE,
   PROJECTS_DESCRIPTION,
   PROJECTS_TITLE,
   SITE_TITLE,
@@ -18,8 +20,8 @@ export const metadata: Metadata = {
     canonical: toAbsoluteSiteUrl(paths.projects.getHref()),
   },
   openGraph: {
-    type: 'website',
-    locale: 'ja_JP',
+    type: OPEN_GRAPH_TYPE_WEBSITE,
+    locale: OPEN_GRAPH_LOCALE,
     title: PROJECTS_TITLE,
     description: PROJECTS_DESCRIPTION,
     siteName: SITE_TITLE,

@@ -3,7 +3,11 @@ import { notFound } from 'next/navigation';
 import { Fragment } from 'react';
 
 import { paths } from '@/config/paths';
-import { SITE_TITLE, toAbsoluteSiteUrl } from '@/config/site';
+import {
+  OPEN_GRAPH_LOCALE,
+  SITE_TITLE,
+  toAbsoluteSiteUrl,
+} from '@/config/site';
 import ArticleSection from '@/features/blog/components/ArticleSection';
 import TableOfContents from '@/features/blog/components/TableOfContents';
 import { PLACEHOLDER_SLUG } from '@/features/blog/lib/constants';
@@ -45,7 +49,7 @@ export async function generateMetadata({
     },
     openGraph: {
       type: 'article',
-      locale: 'ja_JP',
+      locale: OPEN_GRAPH_LOCALE,
       title: meta.title,
       description: meta.description,
       url: toAbsoluteSiteUrl(paths.post.getHref(slug)),

@@ -1,7 +1,14 @@
 import type { Metadata } from 'next';
 
 import { paths } from '@/config/paths';
-import { SITE_DESCRIPTION, SITE_TITLE, toAbsoluteSiteUrl } from '@/config/site';
+import {
+  OPEN_GRAPH_LOCALE,
+  OPEN_GRAPH_TYPE_WEBSITE,
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+  SITE_URL,
+  toAbsoluteSiteUrl,
+} from '@/config/site';
 import PostCard from '@/features/blog/components/PostCard';
 import { getAllPostSummaries } from '@/features/blog/lib/posts';
 import LinksSection from '@/features/portfolio/components/LinksSection';
@@ -11,15 +18,15 @@ export const metadata: Metadata = {
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
   alternates: {
-    canonical: toAbsoluteSiteUrl(paths.home.getHref()),
+    canonical: SITE_URL,
   },
   openGraph: {
-    type: 'website',
-    locale: 'ja_JP',
+    type: OPEN_GRAPH_TYPE_WEBSITE,
+    locale: OPEN_GRAPH_LOCALE,
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     siteName: SITE_TITLE,
-    url: toAbsoluteSiteUrl(paths.home.getHref()),
+    url: SITE_URL,
     images: [
       {
         url: toAbsoluteSiteUrl(paths.home.getOgpImageHref()),
