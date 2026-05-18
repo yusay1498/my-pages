@@ -75,13 +75,16 @@ export const toAbsoluteSiteUrl = (path: string): string => {
     return `${SITE_URL}${normalizedPath}`;
   }
 
-  if (normalizedPath === BASE_PATH) {
-    return SITE_URL;
-  }
+  // BASE_PATH を含む入力は重複を避けるために取り除く。
+  // 例: SITE_URL=https://example.com/my-pages に対して
+  // - /my-pages/projects => /projects に正規化
+  // - /about => そのまま /about
+  const pathWithoutBasePath =
+    normalizedPath === BASE_PATH
+      ? ''
+      : normalizedPath.startsWith(`${BASE_PATH}/`)
+        ? normalizedPath.slice(BASE_PATH.length)
+        : normalizedPath;
 
-  if (normalizedPath.startsWith(`${BASE_PATH}/`)) {
-    return `${SITE_URL}${normalizedPath.slice(BASE_PATH.length)}`;
-  }
-
-  return `${SITE_URL}${normalizedPath}`;
+  return `${SITE_URL}${pathWithoutBasePath}`;
 };

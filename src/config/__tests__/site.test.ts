@@ -17,6 +17,7 @@ describe('site config', () => {
 
     expect(toAbsoluteSiteUrl('/')).toBe('https://example.com');
     expect(toAbsoluteSiteUrl('/projects')).toBe('https://example.com/projects');
+    expect(toAbsoluteSiteUrl('projects')).toBe('https://example.com/projects');
   });
 
   it('basePath ありでbasePath重複を避けて絶対URLを組み立てる', async () => {
@@ -32,6 +33,9 @@ describe('site config', () => {
     expect(toAbsoluteSiteUrl('/my-pages')).toBe('https://example.com/my-pages');
     expect(toAbsoluteSiteUrl('/my-pages/projects')).toBe(
       'https://example.com/my-pages/projects',
+    );
+    expect(toAbsoluteSiteUrl('/about')).toBe(
+      'https://example.com/my-pages/about',
     );
   });
 });
