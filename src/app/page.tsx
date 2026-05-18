@@ -6,7 +6,6 @@ import {
   OPEN_GRAPH_TYPE_WEBSITE,
   SITE_DESCRIPTION,
   SITE_TITLE,
-  SITE_URL,
   toAbsoluteSiteUrl,
 } from '@/config/site';
 import PostCard from '@/features/blog/components/PostCard';
@@ -18,7 +17,7 @@ export const metadata: Metadata = {
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
   alternates: {
-    canonical: SITE_URL,
+    canonical: toAbsoluteSiteUrl(paths.home.getHref()),
   },
   openGraph: {
     type: OPEN_GRAPH_TYPE_WEBSITE,
@@ -26,7 +25,7 @@ export const metadata: Metadata = {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     siteName: SITE_TITLE,
-    url: SITE_URL,
+    url: toAbsoluteSiteUrl(paths.home.getHref()),
     images: [
       {
         url: toAbsoluteSiteUrl(paths.home.getOgpImageHref()),

@@ -61,7 +61,7 @@ export const SITE_URL = normalizedSiteUrl;
 /**
  * サイト配信URL（basePathを含む）を基準に絶対URLを組み立てます。
  *
- * @param path basePath を含まない先頭スラッシュ付きのパス
+ * @param path 先頭スラッシュ付きのパス（basePath の有無を問わない）
  * @returns 絶対URL
  */
 export const toAbsoluteSiteUrl = (path: string): string => {
