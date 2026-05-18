@@ -1,4 +1,4 @@
-import { SITE_TITLE } from '@/config/site';
+import { PROJECTS_DESCRIPTION, PROJECTS_TITLE } from '@/config/site';
 import {
   OGP_IMAGE_CONTENT_TYPE,
   OGP_IMAGE_SIZE,
@@ -11,8 +11,8 @@ export const dynamic = 'force-static';
 
 const OpengraphImage = () => {
   return createOgpImageResponse({
-    title: `Projects - ${SITE_TITLE}`,
-    description: 'パブリックリポジトリの一覧',
+    title: PROJECTS_TITLE,
+    description: PROJECTS_DESCRIPTION,
   });
 };
 

@@ -1,12 +1,9 @@
 import type { Metadata } from 'next';
 
-import { SITE_TITLE } from '@/config/site';
+import { PROJECTS_DESCRIPTION, PROJECTS_TITLE } from '@/config/site';
 import ProjectCard from '@/features/projects/components/ProjectCard';
 import { fetchPublicRepositories } from '@/features/projects/lib/github';
 import { OGP_IMAGE_SIZE } from '@/features/seo/lib/og-image';
-
-const PROJECTS_TITLE = `Projects - ${SITE_TITLE}`;
-const PROJECTS_DESCRIPTION = 'パブリックリポジトリの一覧';
 
 export const metadata: Metadata = {
   title: PROJECTS_TITLE,

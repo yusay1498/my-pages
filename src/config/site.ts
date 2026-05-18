@@ -28,6 +28,8 @@ const trimSlashes = (
 
 export const SITE_TITLE = "Yusay's TIL";
 export const SITE_DESCRIPTION = '個人の学習アウトプットブログ';
+export const PROJECTS_TITLE = `Projects - ${SITE_TITLE}`;
+export const PROJECTS_DESCRIPTION = 'パブリックリポジトリの一覧';
 export const GITHUB_USERNAME = process.env.GITHUB_USERNAME ?? 'yusay1498';
 export const REPOSITORY_NAME =
   process.env.NEXT_PUBLIC_REPOSITORY_NAME ?? 'my-pages';

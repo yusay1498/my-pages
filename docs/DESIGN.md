@@ -179,8 +179,8 @@ my-pages/
 - 生成対象:
   - `/opengraph-image.png`（トップページ）
   - `/projects/opengraph-image.png`（Projectsページ）
-  - `/posts/{テーマスラッグ}/opengraph-image.png`（テーマページ）
-- 記事ページは `meta.json` の `title` / `description` をOGP画像と metadata に利用する
+  - `/posts/{記事スラッグ}/opengraph-image.png`（記事詳細ページ）
+- 記事詳細ページは `meta.json` の `title` / `description` をOGP画像と metadata に利用する
 - OGP画像はビルド時にHTMLと同時に生成される
 - metadata は `openGraph` / `twitter` / canonical URL を各ページで設定する
 
