@@ -1,4 +1,11 @@
 /** サイト全体で共有する設定値 */
+/**
+ * 先頭・末尾のスラッシュを用途に応じて取り除きます。
+ *
+ * @param value 正規化対象の文字列
+ * @param options leading/trailing どちらを削除するかの指定
+ * @returns 正規化後の文字列
+ */
 const trimSlashes = (
   value: string,
   {
@@ -25,7 +32,7 @@ export const GITHUB_USERNAME = process.env.GITHUB_USERNAME ?? 'yusay1498';
 export const REPOSITORY_NAME =
   process.env.NEXT_PUBLIC_REPOSITORY_NAME ?? 'my-pages';
 
-const rawBasePath = process.env.NEXT_PUBLIC_BASE_PATH;
+const rawBasePath = process.env.NEXT_PUBLIC_BASE_PATH?.trim();
 export const BASE_PATH =
   rawBasePath && rawBasePath !== '/' ? `/${trimSlashes(rawBasePath)}` : '';
 
@@ -33,11 +40,16 @@ const envSiteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? process.env.NEXT_PUBLIC_URL;
 const defaultSitePath = BASE_PATH || `/${REPOSITORY_NAME}`;
 const defaultSiteUrl = `https://${GITHUB_USERNAME}.github.io${defaultSitePath}`;
+const normalizedSiteUrl = trimSlashes(envSiteUrl ?? defaultSiteUrl, {
+  leading: false,
+});
+
+if (!/^https?:\/\//.test(normalizedSiteUrl)) {
+  throw new Error(`SITE_URL must be an absolute URL: ${normalizedSiteUrl}`);
+}
 
 // SITE_URL の優先順位:
 // 1) NEXT_PUBLIC_SITE_URL（明示的な公開URL）
 // 2) NEXT_PUBLIC_URL（互換用のフォールバックURL）
 // 3) GitHub Pages向け既定URL
-export const SITE_URL = trimSlashes(envSiteUrl ?? defaultSiteUrl, {
-  leading: false,
-});
+export const SITE_URL = normalizedSiteUrl;

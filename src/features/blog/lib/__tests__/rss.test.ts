@@ -73,4 +73,22 @@ describe('createRssXml', () => {
       ]),
     ).toThrow('Invalid RSS date: 2025-13-01');
   });
+
+  it('不正な日付フォーマットが含まれる場合はエラーを投げる', () => {
+    expect(() =>
+      createRssXml([
+        {
+          slug: 'invalid-format',
+          meta: {
+            title: 'Invalid',
+            description: 'Invalid format',
+            tags: [],
+            createdAt: '2025-01-01',
+            updatedAt: 'not-a-date',
+            status: 'published',
+          },
+        },
+      ]),
+    ).toThrow('Invalid RSS date format: not-a-date');
+  });
 });

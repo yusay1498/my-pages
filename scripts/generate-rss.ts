@@ -4,15 +4,15 @@ import path from 'node:path';
 import { getAllPostSummaries } from '@/features/blog/lib/posts';
 import { createRssXml } from '@/features/blog/lib/rss';
 
-const outputDir = process.env.NEXT_OUTPUT_DIR ?? 'out';
-const outDir = path.resolve(process.cwd(), outputDir);
-const outputPath = path.join(outDir, 'rss.xml');
+const outputDirName = process.env.NEXT_OUTPUT_DIR ?? 'out';
+const outputDirPath = path.resolve(process.cwd(), outputDirName);
+const outputPath = path.join(outputDirPath, 'rss.xml');
 
 try {
   const posts = getAllPostSummaries();
   const rssXml = createRssXml(posts);
 
-  mkdirSync(outDir, { recursive: true });
+  mkdirSync(outputDirPath, { recursive: true });
   writeFileSync(outputPath, rssXml, 'utf-8');
 
   console.info(`Generated: ${outputPath}`);

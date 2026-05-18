@@ -2,6 +2,8 @@ import { paths } from '@/config/paths';
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from '@/config/site';
 import type { PostSummary } from '@/features/blog/types';
 
+const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
 const escapeXml = (value: string): string =>
   value
     .replaceAll('&', '&amp;')
@@ -11,6 +13,10 @@ const escapeXml = (value: string): string =>
     .replaceAll("'", '&apos;');
 
 const formatRssDate = (date: string): string => {
+  if (!DATE_PATTERN.test(date)) {
+    throw new Error(`Invalid RSS date format: ${date}`);
+  }
+
   const parsedDate = new Date(`${date}T00:00:00Z`);
 
   if (Number.isNaN(parsedDate.getTime())) {
