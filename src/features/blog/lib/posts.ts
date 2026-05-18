@@ -124,6 +124,35 @@ export const getAllPostSummaries = (): PostSummary[] => {
     .sort((a, b) => b.meta.updatedAt.localeCompare(a.meta.updatedAt));
 };
 
+export const getAllPublishedTagsFromSummaries = (
+  postSummaries: readonly PostSummary[],
+): string[] => {
+  const uniqueTags = new Set<string>();
+
+  postSummaries.forEach((summary) => {
+    summary.meta.tags.forEach((tag) => {
+      uniqueTags.add(tag);
+    });
+  });
+
+  return [...uniqueTags].sort((a, b) => a.localeCompare(b));
+};
+
+export const getPostSummariesByTagFromSummaries = (
+  postSummaries: readonly PostSummary[],
+  tag: string,
+): PostSummary[] => {
+  return postSummaries.filter((summary) => summary.meta.tags.includes(tag));
+};
+
+export const getAllPublishedTags = (): string[] => {
+  return getAllPublishedTagsFromSummaries(getAllPostSummaries());
+};
+
+export const getPostSummariesByTag = (tag: string): PostSummary[] => {
+  return getPostSummariesByTagFromSummaries(getAllPostSummaries(), tag);
+};
+
 export const getAllPosts = (): Post[] => {
   return getAllPostDirectories()
     .map((slug): Post | null => {

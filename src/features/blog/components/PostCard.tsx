@@ -26,7 +26,9 @@ const PostCard = ({ post }: PostCardProps) => {
             key={tag}
             className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-200"
           >
-            {tag}
+            <Link href={paths.tag.getHref(tag)} className="hover:underline">
+              {tag}
+            </Link>
           </li>
         ))}
       </ul>

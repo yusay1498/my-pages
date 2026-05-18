@@ -11,6 +11,9 @@ export const paths = {
     getOgpImageHref: (slug: string) =>
       `/posts/${encodeURIComponent(slug)}/opengraph-image.png`,
   },
+  tag: {
+    getHref: (tag: string) => `/tags/${encodeURIComponent(tag)}`,
+  },
   projects: {
     getHref: () => '/projects',
     getOgpImageHref: () => '/projects/opengraph-image.png',
