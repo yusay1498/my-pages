@@ -1,7 +1,36 @@
+import type { Metadata } from 'next';
+
 import { SITE_DESCRIPTION, SITE_TITLE } from '@/config/site';
 import PostCard from '@/features/blog/components/PostCard';
 import { getAllPostSummaries } from '@/features/blog/lib/posts';
 import LinksSection from '@/features/portfolio/components/LinksSection';
+import { OGP_IMAGE_SIZE } from '@/features/seo/lib/og-image';
+
+export const metadata: Metadata = {
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: '/',
+    images: [
+      {
+        url: '/opengraph-image.png',
+        width: OGP_IMAGE_SIZE.width,
+        height: OGP_IMAGE_SIZE.height,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: ['/opengraph-image.png'],
+  },
+};
 
 const HomePage = () => {
   const posts = getAllPostSummaries();

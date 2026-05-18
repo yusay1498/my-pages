@@ -36,6 +36,14 @@ npm run dev
 - 配信URLは `https://<GITHUB_USERNAME>.github.io/<REPOSITORY_NAME>/rss.xml` です。
 - 既定値（環境変数未設定時）のURLは `https://yusay1498.github.io/my-pages/rss.xml` です。
 
+## OGP画像
+
+- ビルド時に以下のOGP画像を自動生成します。
+  - `/opengraph-image.png`
+  - `/projects/opengraph-image.png`
+  - `/posts/{slug}/opengraph-image.png`
+- 記事ページの画像テキストは `posts/{slug}/meta.json` の `title` と `description` を使用します。
+
 ## ディレクトリ構成
 
 [bulletproof-react](https://github.com/alan2207/bulletproof-react) を参考に、feature ベースのディレクトリ構成を採用しています。

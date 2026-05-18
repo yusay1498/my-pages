@@ -4,13 +4,39 @@ import { ReactNode } from 'react';
 import { AppProvider } from '@/app/provider';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
-import { SITE_DESCRIPTION, SITE_TITLE } from '@/config/site';
+import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from '@/config/site';
+import { OGP_IMAGE_SIZE } from '@/features/seo/lib/og-image';
 
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
+  metadataBase: new URL(SITE_URL),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'ja_JP',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    siteName: SITE_TITLE,
+    url: SITE_URL,
+    images: [
+      {
+        url: '/opengraph-image.png',
+        width: OGP_IMAGE_SIZE.width,
+        height: OGP_IMAGE_SIZE.height,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: ['/opengraph-image.png'],
+  },
 };
 
 const RootLayout = ({ children }: { children: ReactNode }) => {

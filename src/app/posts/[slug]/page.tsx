@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Fragment } from 'react';
 
+import { SITE_TITLE } from '@/config/site';
+import { paths } from '@/config/paths';
 import ArticleSection from '@/features/blog/components/ArticleSection';
 import TableOfContents from '@/features/blog/components/TableOfContents';
 import { extractTocItems } from '@/features/blog/lib/heading';
@@ -10,6 +12,7 @@ import {
   getPostBySlug,
   getPostMetaBySlug,
 } from '@/features/blog/lib/posts';
+import { OGP_IMAGE_SIZE } from '@/features/seo/lib/og-image';
 
 export const dynamicParams = false;
 const PLACEHOLDER_SLUG = '__placeholder__';
@@ -37,6 +40,29 @@ export async function generateMetadata({
   return {
     title: meta.title,
     description: meta.description,
+    alternates: {
+      canonical: paths.post.getHref(slug),
+    },
+    openGraph: {
+      type: 'article',
+      title: meta.title,
+      description: meta.description,
+      url: paths.post.getHref(slug),
+      siteName: SITE_TITLE,
+      images: [
+        {
+          url: `${paths.post.getHref(slug)}/opengraph-image.png`,
+          width: OGP_IMAGE_SIZE.width,
+          height: OGP_IMAGE_SIZE.height,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: meta.title,
+      description: meta.description,
+      images: [`${paths.post.getHref(slug)}/opengraph-image.png`],
+    },
   };
 }
 

@@ -1,11 +1,37 @@
 import type { Metadata } from 'next';
 
+import { SITE_TITLE } from '@/config/site';
 import ProjectCard from '@/features/projects/components/ProjectCard';
 import { fetchPublicRepositories } from '@/features/projects/lib/github';
+import { OGP_IMAGE_SIZE } from '@/features/seo/lib/og-image';
+
+const PROJECTS_TITLE = `Projects - ${SITE_TITLE}`;
+const PROJECTS_DESCRIPTION = 'パブリックリポジトリの一覧';
 
 export const metadata: Metadata = {
-  title: "Projects - Yusay's TIL",
-  description: 'パブリックリポジトリの一覧',
+  title: PROJECTS_TITLE,
+  description: PROJECTS_DESCRIPTION,
+  alternates: {
+    canonical: '/projects',
+  },
+  openGraph: {
+    title: PROJECTS_TITLE,
+    description: PROJECTS_DESCRIPTION,
+    url: '/projects',
+    images: [
+      {
+        url: '/projects/opengraph-image.png',
+        width: OGP_IMAGE_SIZE.width,
+        height: OGP_IMAGE_SIZE.height,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: PROJECTS_TITLE,
+    description: PROJECTS_DESCRIPTION,
+    images: ['/projects/opengraph-image.png'],
+  },
 };
 
 const ProjectsPage = async () => {
