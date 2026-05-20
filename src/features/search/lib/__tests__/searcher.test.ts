@@ -35,8 +35,8 @@ describe('createSearcher', () => {
     const results = searcher.search('React');
 
     expect(results).toHaveLength(10);
-    expect(results[0]?.slug).toBe('post-1');
-    expect(results[9]?.slug).toBe('post-10');
+    expect(results[0].slug).toBe('post-1');
+    expect(results[9].slug).toBe('post-10');
   });
 
   it('タイトル一致を説明文一致より優先して返す', () => {
