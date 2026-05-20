@@ -25,6 +25,7 @@ export const useSearch = () => {
   const [isReady, setIsReady] = useState(false);
   const searcherRef = useRef<ReturnType<typeof createSearcher> | null>(null);
   const loadingPromiseRef = useRef<Promise<void> | null>(null);
+  const indexUrl = `${BASE_PATH}/search-index.json`;
 
   const loadIndex = useCallback(async () => {
     if (loadingPromiseRef.current) return loadingPromiseRef.current;
@@ -33,7 +34,7 @@ export const useSearch = () => {
       setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       try {
-        const response = await fetch(`${BASE_PATH}/search-index.json`);
+        const response = await fetch(indexUrl);
         if (!response.ok) {
           throw new Error('検索インデックスの読み込みに失敗しました');
         }
@@ -51,7 +52,7 @@ export const useSearch = () => {
 
     loadingPromiseRef.current = promise;
     return promise;
-  }, []);
+  }, [indexUrl]);
 
   useEffect(() => {
     if (!isReady || !searcherRef.current || query.trim().length === 0) {

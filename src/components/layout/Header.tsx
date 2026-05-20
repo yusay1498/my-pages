@@ -1,9 +1,13 @@
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 
 import { SITE_TITLE } from '@/config/site';
-import { SearchButton } from '@/features/search/components/SearchButton';
 
-export const Header = () => {
+type HeaderProps = {
+  readonly rightSlot?: ReactNode;
+};
+
+export const Header = ({ rightSlot }: HeaderProps) => {
   return (
     <header className="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
       <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
@@ -13,7 +17,7 @@ export const Header = () => {
         >
           {SITE_TITLE}
         </Link>
-        <SearchButton />
+        {rightSlot}
       </div>
     </header>
   );

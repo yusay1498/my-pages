@@ -13,6 +13,7 @@ import {
   SITE_URL,
   toAbsoluteSiteUrl,
 } from '@/config/site';
+import { SearchButton } from '@/features/search/components/SearchButton';
 import { OGP_IMAGE_SIZE } from '@/features/seo/lib/og-image';
 
 import '@/styles/globals.css';
@@ -55,7 +56,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
       </head>
       <body className="flex min-h-screen flex-col">
         <AppProvider>
-          <Header />
+          <Header rightSlot={<SearchButton />} />
           <main className="flex-1">{children}</main>
           <Footer />
         </AppProvider>
