@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest';
 import { createSearcher } from '@/features/search/lib/searcher';
 import type { SearchIndexEntry } from '@/features/search/types';
 
+const TOTAL_ENTRIES = 12;
+
 const createEntry = (
   slug: string,
   overrides: Partial<SearchIndexEntry> = {},
@@ -25,7 +27,7 @@ describe('createSearcher', () => {
 
   it('一致件数は最大10件に制限する', () => {
     const searcher = createSearcher(
-      Array.from({ length: 12 }, (_, index) =>
+      Array.from({ length: TOTAL_ENTRIES }, (_, index) =>
         createEntry(`post-${index + 1}`, {
           title: `React article ${index + 1}`,
         }),
