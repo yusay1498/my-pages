@@ -36,6 +36,22 @@ export const GITHUB_USERNAME = process.env.GITHUB_USERNAME ?? 'yusay1498';
 export const REPOSITORY_NAME =
   process.env.NEXT_PUBLIC_REPOSITORY_NAME ?? 'my-pages';
 
+/** giscus コメント機能の設定 */
+const rawGiscusRepo =
+  process.env.NEXT_PUBLIC_GISCUS_REPO ??
+  `${GITHUB_USERNAME}/${REPOSITORY_NAME}`;
+if (rawGiscusRepo && !rawGiscusRepo.includes('/')) {
+  throw new Error(
+    `NEXT_PUBLIC_GISCUS_REPO must be in "owner/repo" format: ${rawGiscusRepo}`,
+  );
+}
+export const GISCUS_REPO = rawGiscusRepo as `${string}/${string}`;
+export const GISCUS_REPO_ID = process.env.NEXT_PUBLIC_GISCUS_REPO_ID ?? '';
+export const GISCUS_CATEGORY =
+  process.env.NEXT_PUBLIC_GISCUS_CATEGORY ?? 'Comments';
+export const GISCUS_CATEGORY_ID =
+  process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID ?? '';
+
 const rawBasePath = process.env.NEXT_PUBLIC_BASE_PATH?.trim();
 export const BASE_PATH =
   rawBasePath && rawBasePath !== '/' ? `/${trimSlashes(rawBasePath)}` : '';

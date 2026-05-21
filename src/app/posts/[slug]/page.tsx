@@ -18,6 +18,7 @@ import {
   getPostBySlug,
   getPostMetaBySlug,
 } from '@/features/blog/lib/posts';
+import GiscusWidget from '@/features/comments/components/GiscusWidget';
 import { OGP_IMAGE_SIZE } from '@/features/seo/lib/og-image';
 
 export const dynamicParams = false;
@@ -128,6 +129,13 @@ export default async function PostPage({ params }: PageParams) {
           </Fragment>
         ))}
       </div>
+
+      <section className="mt-16 border-t border-gray-200 pt-10 dark:border-gray-700">
+        <h2 className="mb-6 text-xl font-semibold text-gray-900 dark:text-gray-100">
+          コメント
+        </h2>
+        <GiscusWidget />
+      </section>
     </div>
   );
 }
