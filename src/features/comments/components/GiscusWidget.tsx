@@ -1,8 +1,10 @@
 'use client';
 
 import Giscus from '@giscus/react';
+import { usePathname } from 'next/navigation';
 
 import {
+  BASE_PATH,
   GISCUS_CATEGORY,
   GISCUS_CATEGORY_ID,
   GISCUS_REPO,
@@ -17,10 +19,20 @@ import {
  * これらの値は giscus.app で取得し、環境変数に設定する必要がある。
  */
 export default function GiscusWidget() {
-  if (!GISCUS_REPO_ID || !GISCUS_CATEGORY_ID) {
+  const pathname = usePathname();
+  const discussionTerm =
+    !BASE_PATH || pathname === '/'
+      ? pathname
+      : pathname === BASE_PATH
+        ? '/'
+        : pathname.startsWith(`${BASE_PATH}/`)
+          ? pathname.slice(BASE_PATH.length)
+          : pathname;
+
+  if (!GISCUS_REPO || !GISCUS_REPO_ID || !GISCUS_CATEGORY_ID) {
     if (process.env.NODE_ENV === 'development') {
       console.warn(
-        '[GiscusWidget] NEXT_PUBLIC_GISCUS_REPO_ID または NEXT_PUBLIC_GISCUS_CATEGORY_ID が未設定のため、コメント欄を表示しません。',
+        '[GiscusWidget] giscus 設定が不足または不正なため、コメント欄を表示しません。',
       );
     }
     return null;
@@ -32,7 +44,8 @@ export default function GiscusWidget() {
       repoId={GISCUS_REPO_ID}
       category={GISCUS_CATEGORY}
       categoryId={GISCUS_CATEGORY_ID}
-      mapping="pathname"
+      mapping="specific"
+      term={discussionTerm}
       reactionsEnabled="1"
       emitMetadata="0"
       inputPosition="top"

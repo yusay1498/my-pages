@@ -38,4 +38,39 @@ describe('site config', () => {
       'https://example.com/my-pages/about',
     );
   });
+
+  it('NEXT_PUBLIC_GISCUS_REPO が未指定の場合は既定値を使う', async () => {
+    vi.stubEnv('GITHUB_USERNAME', 'octocat');
+    vi.stubEnv('NEXT_PUBLIC_REPOSITORY_NAME', 'hello-world');
+
+    const { GISCUS_REPO } = await import('@/config/site');
+
+    expect(GISCUS_REPO).toBe('octocat/hello-world');
+  });
+
+  it('NEXT_PUBLIC_GISCUS_REPO が空文字の場合は既定値を使う', async () => {
+    vi.stubEnv('GITHUB_USERNAME', 'octocat');
+    vi.stubEnv('NEXT_PUBLIC_REPOSITORY_NAME', 'hello-world');
+    vi.stubEnv('NEXT_PUBLIC_GISCUS_REPO', '   ');
+
+    const { GISCUS_REPO } = await import('@/config/site');
+
+    expect(GISCUS_REPO).toBe('octocat/hello-world');
+  });
+
+  it('NEXT_PUBLIC_GISCUS_REPO が不正な形式の場合は無効化する', async () => {
+    const consoleWarnSpy = vi
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
+    vi.stubEnv('NODE_ENV', 'development');
+    vi.stubEnv('NEXT_PUBLIC_GISCUS_REPO', 'owner/repo/extra');
+
+    const { GISCUS_REPO } = await import('@/config/site');
+
+    expect(GISCUS_REPO).toBe('');
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    expect(consoleWarnSpy.mock.calls[0]?.[0]).toContain(
+      'NEXT_PUBLIC_GISCUS_REPO が不正なためコメント機能を無効化します',
+    );
+  });
 });

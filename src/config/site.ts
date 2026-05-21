@@ -37,15 +37,21 @@ export const REPOSITORY_NAME =
   process.env.NEXT_PUBLIC_REPOSITORY_NAME ?? 'my-pages';
 
 /** giscus コメント機能の設定 */
-const rawGiscusRepo =
-  process.env.NEXT_PUBLIC_GISCUS_REPO ??
-  `${GITHUB_USERNAME}/${REPOSITORY_NAME}`;
-if (rawGiscusRepo && !rawGiscusRepo.includes('/')) {
-  throw new Error(
-    `NEXT_PUBLIC_GISCUS_REPO must be in "owner/repo" format: ${rawGiscusRepo}`,
+const defaultGiscusRepo = `${GITHUB_USERNAME}/${REPOSITORY_NAME}`;
+const rawGiscusRepo = process.env.NEXT_PUBLIC_GISCUS_REPO?.trim();
+const resolvedGiscusRepo = rawGiscusRepo || defaultGiscusRepo;
+const giscusRepoPattern = /^[^/]+\/[^/]+$/;
+const isValidGiscusRepo = giscusRepoPattern.test(resolvedGiscusRepo);
+
+if (!isValidGiscusRepo && process.env.NODE_ENV === 'development') {
+  console.warn(
+    `[site config] NEXT_PUBLIC_GISCUS_REPO が不正なためコメント機能を無効化します: ${resolvedGiscusRepo}`,
   );
 }
-export const GISCUS_REPO = rawGiscusRepo as `${string}/${string}`;
+
+export const GISCUS_REPO = isValidGiscusRepo
+  ? (resolvedGiscusRepo as `${string}/${string}`)
+  : '';
 export const GISCUS_REPO_ID = process.env.NEXT_PUBLIC_GISCUS_REPO_ID ?? '';
 export const GISCUS_CATEGORY =
   process.env.NEXT_PUBLIC_GISCUS_CATEGORY ?? 'Comments';
