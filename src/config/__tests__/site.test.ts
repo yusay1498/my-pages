@@ -72,5 +72,6 @@ describe('site config', () => {
     expect(consoleWarnSpy.mock.calls[0]?.[0]).toContain(
       'NEXT_PUBLIC_GISCUS_REPO が不正なためコメント機能を無効化します',
     );
+    consoleWarnSpy.mockRestore();
   });
 });

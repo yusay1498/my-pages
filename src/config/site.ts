@@ -40,8 +40,8 @@ export const REPOSITORY_NAME =
 const defaultGiscusRepo = `${GITHUB_USERNAME}/${REPOSITORY_NAME}`;
 const rawGiscusRepo = process.env.NEXT_PUBLIC_GISCUS_REPO?.trim();
 const resolvedGiscusRepo = rawGiscusRepo || defaultGiscusRepo;
-const giscusRepoPattern = /^[^/]+\/[^/]+$/;
-const isValidGiscusRepo = giscusRepoPattern.test(resolvedGiscusRepo);
+const OWNER_REPO_PATTERN = /^[^/]+\/[^/]+$/;
+const isValidGiscusRepo = OWNER_REPO_PATTERN.test(resolvedGiscusRepo);
 
 if (!isValidGiscusRepo && process.env.NODE_ENV === 'development') {
   console.warn(

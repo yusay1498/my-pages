@@ -11,6 +11,26 @@ import {
   GISCUS_REPO_ID,
 } from '@/config/site';
 
+const toDiscussionTerm = (pathname: string, basePath: string): string => {
+  if (pathname === '/') {
+    return '/';
+  }
+
+  if (!basePath) {
+    return pathname;
+  }
+
+  if (pathname === basePath) {
+    return '/';
+  }
+
+  if (pathname.startsWith(`${basePath}/`)) {
+    return pathname.slice(basePath.length);
+  }
+
+  return pathname;
+};
+
 /**
  * GitHub Discussions ベースのコメントウィジェット（giscus）。
  * クライアント側でのみ描画されるため 'use client' が必要。
@@ -20,14 +40,7 @@ import {
  */
 export default function GiscusWidget() {
   const pathname = usePathname();
-  const discussionTerm =
-    !BASE_PATH || pathname === '/'
-      ? pathname
-      : pathname === BASE_PATH
-        ? '/'
-        : pathname.startsWith(`${BASE_PATH}/`)
-          ? pathname.slice(BASE_PATH.length)
-          : pathname;
+  const discussionTerm = toDiscussionTerm(pathname, BASE_PATH);
 
   if (!GISCUS_REPO || !GISCUS_REPO_ID || !GISCUS_CATEGORY_ID) {
     if (process.env.NODE_ENV === 'development') {
