@@ -38,8 +38,8 @@ const ALLOWED_URI_REGEXP = new RegExp(
 );
 
 /**
- * marked.lexer() でトークン分割し、mermaid コードブロックと
- * 通常 Markdown のセグメントに分ける。
+ * marked.lexer() でトークン分割し、mermaid コードブロック・
+ * 通常 code block・通常 Markdown のセグメントに分ける。
  * lexer ベースのため CommonMark の各種フェンス形式に対応している。
  */
 function splitContentSegments(content: string): ContentSegment[] {

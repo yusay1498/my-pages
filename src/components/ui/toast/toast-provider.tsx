@@ -78,15 +78,11 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
   return (
     <ToastContext.Provider value={contextValue}>
       {children}
-      <div
-        aria-live="polite"
-        aria-atomic="true"
-        className="pointer-events-none fixed top-4 right-4 z-50 flex w-full max-w-xs flex-col gap-2"
-      >
+      <div className="pointer-events-none fixed top-4 right-4 z-50 flex w-full max-w-xs flex-col gap-2">
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            role="status"
+            role={toast.variant === 'error' ? 'alert' : 'status'}
             className={
               toast.variant === 'success'
                 ? 'rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900 shadow-md dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100'
