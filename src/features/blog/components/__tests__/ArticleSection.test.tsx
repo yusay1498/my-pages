@@ -9,6 +9,14 @@ vi.mock('@/features/blog/components/MermaidBlockLazy', () => ({
   ),
 }));
 
+vi.mock('@/features/blog/components/CodeBlock', () => ({
+  default: ({ code, language }: { code: string; language?: string }) => (
+    <div data-testid="code-block" data-language={language}>
+      {code}
+    </div>
+  ),
+}));
+
 describe('ArticleSection', () => {
   afterEach(() => {
     cleanup();
@@ -67,7 +75,10 @@ A-->B
 
     expect(screen.getAllByText('項目1')).toHaveLength(1);
     expect(screen.getAllByText('項目2')).toHaveLength(1);
-    expect(screen.getAllByText('const value = 1;')).toHaveLength(1);
+    expect(screen.getByTestId('code-block').textContent).toContain(
+      'const value = 1;',
+    );
+    expect(screen.getByTestId('code-block').dataset.language).toBe('ts');
     expect(screen.getByTestId('mermaid-block').textContent).toContain(
       'graph TD',
     );
