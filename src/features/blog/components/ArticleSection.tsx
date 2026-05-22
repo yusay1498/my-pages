@@ -20,7 +20,6 @@ type ContentSegment =
   | {
       readonly type: 'mermaid';
       readonly code: string;
-      readonly language?: string;
       readonly tokenIndex: number;
     }
   | {
@@ -66,7 +65,6 @@ function splitContentSegments(content: string): ContentSegment[] {
         segments.push({
           type: 'mermaid',
           code: token.text,
-          language: token.lang,
           tokenIndex: i,
         });
       } else {

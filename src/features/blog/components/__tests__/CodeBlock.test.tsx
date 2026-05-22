@@ -1,4 +1,10 @@
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import CodeBlock from '@/features/blog/components/CodeBlock';
@@ -6,6 +12,7 @@ import CodeBlock from '@/features/blog/components/CodeBlock';
 const showToast = vi.fn();
 
 vi.mock('@/components/ui/toast', () => ({
+  TOAST_DURATION_MS: 2400,
   useToast: () => ({ showToast }),
 }));
 

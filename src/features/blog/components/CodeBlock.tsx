@@ -2,14 +2,14 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { useToast } from '@/components/ui/toast';
+import { TOAST_DURATION_MS, useToast } from '@/components/ui/toast';
 
 type CodeBlockProps = {
   readonly code: string;
   readonly language?: string;
 };
 
-const COPIED_LABEL_RESET_MS = 1800;
+const COPIED_LABEL_RESET_MS = TOAST_DURATION_MS;
 
 const copyByExecCommand = (value: string): boolean => {
   if (typeof document.execCommand !== 'function') {
@@ -49,13 +49,15 @@ const copyToClipboard = async (value: string): Promise<boolean> => {
 
 const CodeBlock = ({ code, language }: CodeBlockProps) => {
   const [isCopied, setIsCopied] = useState(false);
-  const resetTimerRef = useRef<number | null>(null);
+  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { showToast } = useToast();
 
   const displayLanguage = useMemo(
-    () => language?.trim().split(/\s+/)[0]?.toLowerCase() ?? 'text',
+    () => language?.trim().split(/\s+/)[0]?.toLowerCase() || 'text',
     [language],
   );
+  const languageClassName =
+    displayLanguage === 'text' ? '' : `language-${displayLanguage}`;
 
   const handleCopy = useCallback(async () => {
     const copied = await copyToClipboard(code);
@@ -72,9 +74,9 @@ const CodeBlock = ({ code, language }: CodeBlockProps) => {
     showToast({ message: 'コードをコピーしました', variant: 'success' });
 
     if (resetTimerRef.current !== null) {
-      window.clearTimeout(resetTimerRef.current);
+      clearTimeout(resetTimerRef.current);
     }
-    resetTimerRef.current = window.setTimeout(() => {
+    resetTimerRef.current = setTimeout(() => {
       setIsCopied(false);
       resetTimerRef.current = null;
     }, COPIED_LABEL_RESET_MS);
@@ -83,7 +85,7 @@ const CodeBlock = ({ code, language }: CodeBlockProps) => {
   useEffect(() => {
     return () => {
       if (resetTimerRef.current !== null) {
-        window.clearTimeout(resetTimerRef.current);
+        clearTimeout(resetTimerRef.current);
       }
     };
   }, []);
@@ -104,7 +106,9 @@ const CodeBlock = ({ code, language }: CodeBlockProps) => {
         </button>
       </div>
       <pre className="m-0 overflow-x-auto p-4">
-        <code className="text-sm text-gray-100">{code}</code>
+        <code className={`text-sm text-gray-100 ${languageClassName}`.trim()}>
+          {code}
+        </code>
       </pre>
     </div>
   );

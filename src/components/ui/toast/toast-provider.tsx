@@ -2,12 +2,14 @@
 
 import {
   createContext,
+  useEffect,
   useCallback,
   useContext,
   useMemo,
+  useRef,
   useState,
 } from 'react';
-import type { ReactNode } from 'react';
+import type { Dispatch, ReactNode } from 'react';
 
 type ToastVariant = 'success' | 'error';
 
@@ -23,10 +25,10 @@ type ToastInput = {
 };
 
 type ToastContextValue = {
-  readonly showToast: (toast: ToastInput) => void;
+  readonly showToast: Dispatch<ToastInput>;
 };
 
-const TOAST_DURATION_MS = 2400;
+export const TOAST_DURATION_MS = 2400;
 
 const ToastContext = createContext<ToastContextValue | null>(null);
 
@@ -36,6 +38,7 @@ type ToastProviderProps = {
 
 export const ToastProvider = ({ children }: ToastProviderProps) => {
   const [toasts, setToasts] = useState<readonly ToastItem[]>([]);
+  const timeoutIdsRef = useRef(new Set<number>());
 
   const removeToast = useCallback((id: string) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
@@ -43,14 +46,29 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
 
   const showToast = useCallback(
     ({ message, variant = 'success' }: ToastInput) => {
-      const id = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      const id =
+        typeof crypto.randomUUID === 'function'
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
       setToasts((prev) => [...prev, { id, message, variant }]);
-      window.setTimeout(() => {
+      const timeoutId = window.setTimeout(() => {
         removeToast(id);
+        timeoutIdsRef.current.delete(timeoutId);
       }, TOAST_DURATION_MS);
+      timeoutIdsRef.current.add(timeoutId);
     },
     [removeToast],
   );
+
+  useEffect(() => {
+    const timeoutIds = timeoutIdsRef.current;
+    return () => {
+      timeoutIds.forEach((timeoutId) => {
+        window.clearTimeout(timeoutId);
+      });
+      timeoutIds.clear();
+    };
+  }, []);
 
   const contextValue = useMemo(
     () => ({ showToast }),
@@ -69,11 +87,11 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
           <div
             key={toast.id}
             role="status"
-            className={`rounded-md border px-3 py-2 text-sm shadow-md ${
+            className={
               toast.variant === 'success'
-                ? 'border-emerald-200 bg-emerald-50 text-emerald-900 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100'
-                : 'border-red-200 bg-red-50 text-red-900 dark:border-red-800 dark:bg-red-950 dark:text-red-100'
-            }`}
+                ? 'rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900 shadow-md dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100'
+                : 'rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900 shadow-md dark:border-red-800 dark:bg-red-950 dark:text-red-100'
+            }
           >
             {toast.message}
           </div>
