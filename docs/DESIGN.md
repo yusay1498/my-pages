@@ -20,6 +20,7 @@
 | Markdown解析 | marked + gray-matter |
 | HTMLサニタイズ | isomorphic-dompurify |
 | ダイアグラム描画 | mermaid.js（Markdown内の mermaid コードブロックを図として表示） |
+| コメント機能 | giscus（GitHub Discussions ベース） |
 | デプロイ | GitHub Actions → GitHub Pages |
 
 ## 3. ディレクトリ構成
@@ -209,6 +210,7 @@ my-pages/
 - 記事間にセパレーターを入れる
 - 目次（Table of Contents）を自動生成する
 - Mermaidコードブロックはクライアント側でダイアグラムとして描画する
+- ページ下部に giscus によるコメントセクションを表示する
 
 ### 全文検索
 
@@ -276,7 +278,6 @@ my-pages/
 ### アナリティクス / フィードバック
 
 - アクセス解析（プライバシー重視: Plausible or Umami セルフホスト）
-- コメント機能（GitHub Discussions ベースの giscus を導入）
 - 「役に立った」ボタン（GitHub API で Issue にリアクションを付ける簡易フィードバック）
 
 ### パフォーマンス / DX
