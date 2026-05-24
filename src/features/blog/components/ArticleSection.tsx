@@ -1,6 +1,7 @@
 import DOMPurify from 'isomorphic-dompurify';
 import { marked } from 'marked';
 
+import CodeBlock from '@/features/blog/components/CodeBlock';
 import MermaidBlockLazy from '@/features/blog/components/MermaidBlockLazy';
 import { generateHeadingId } from '@/features/blog/lib/heading';
 import type { Article } from '@/features/blog/types';
@@ -20,6 +21,12 @@ type ContentSegment =
       readonly type: 'mermaid';
       readonly code: string;
       readonly tokenIndex: number;
+    }
+  | {
+      readonly type: 'code';
+      readonly code: string;
+      readonly language?: string;
+      readonly tokenIndex: number;
     };
 
 const ALLOWED_URI_SCHEMES = ['http', 'https', 'mailto'] as const;
@@ -31,8 +38,8 @@ const ALLOWED_URI_REGEXP = new RegExp(
 );
 
 /**
- * marked.lexer() でトークン分割し、mermaid コードブロックと
- * 通常 Markdown のセグメントに分ける。
+ * marked.lexer() でトークン分割し、mermaid コードブロック・
+ * 通常 code block・通常 Markdown のセグメントに分ける。
  * lexer ベースのため CommonMark の各種フェンス形式に対応している。
  */
 function splitContentSegments(content: string): ContentSegment[] {
@@ -44,8 +51,7 @@ function splitContentSegments(content: string): ContentSegment[] {
   let markdownStartIndex = 0;
 
   for (const [i, token] of tokens.entries()) {
-    if (token.type === 'code' && token.lang === 'mermaid') {
-      // mermaid ブロックに到達したらバッファをフラッシュしてセグメント化
+    if (token.type === 'code') {
       if (markdownBuffer) {
         segments.push({
           type: 'markdown',
@@ -54,7 +60,22 @@ function splitContentSegments(content: string): ContentSegment[] {
         });
         markdownBuffer = '';
       }
-      segments.push({ type: 'mermaid', code: token.text, tokenIndex: i });
+
+      if (token.lang === 'mermaid') {
+        segments.push({
+          type: 'mermaid',
+          code: token.text,
+          tokenIndex: i,
+        });
+      } else {
+        segments.push({
+          type: 'code',
+          code: token.text,
+          language: token.lang,
+          tokenIndex: i,
+        });
+      }
+
       markdownStartIndex = i + 1;
     } else {
       // 通常 Markdown トークン: raw テキストをバッファに蓄積
@@ -100,6 +121,12 @@ const ArticleSection = ({ article, headingIdMap }: ArticleSectionProps) => {
 
     if (segment.type === 'mermaid') {
       return <MermaidBlockLazy key={key} code={segment.code} />;
+    }
+
+    if (segment.type === 'code') {
+      return (
+        <CodeBlock key={key} code={segment.code} language={segment.language} />
+      );
     }
 
     const rawHtml = marked.parse(segment.content, {
