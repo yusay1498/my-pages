@@ -32,11 +32,11 @@ applyTo: "**/*.java"
 - 更新時はエンティティIDを指定して更新する（IDは `save` の返却値から取得して呼び出し元に伝える）
 - Controller のメソッド命名はHTTPメソッドに寄せる（`get` / `post` / `put` / `delete`）
 
-## Repository 設計（JPA準拠）
+## Spring Data Repository 設計
 - `findById` は `Optional` で返す
 - `save` メソッドで insert / update の両方を処理する（メソッドを分けない）
 - `save` は保存した結果のエンティティを返却する（自動採番IDを呼び出し元に伝えるため）
-- save 後は `findById` の結果を返却する（引数ベースの値を返すと、INSERT失敗時でも値が返ってしまう）
+- `save` 後に永続化結果を呼び出し元へ返す方針を明確にする（引数ベースの値をそのまま返すと、永続化失敗時でも成功したように見えるおそれがある）
 - 削除は `deleteById` の命名に統一する
 
 ## エラーハンドリング
