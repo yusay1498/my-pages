@@ -51,7 +51,7 @@ applyTo: "**/*.java"
 
 ## 並行処理
 - Virtual Threads（`Thread.ofVirtual()`）を活用できる箇所はないか
-- Structured Concurrency を適切に使っているか
+- Structured Concurrency を適切に使っているか（Java 25 時点ではプレビュー機能。`--enable-preview` が必要）
 - スレッドセーフティが確保されているか（`synchronized`、`ConcurrentHashMap`、`Atomic*`）
 - デッドロックやレースコンディションのリスクがないか
 
