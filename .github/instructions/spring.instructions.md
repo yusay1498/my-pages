@@ -7,7 +7,12 @@ applyTo: "**/*.java"
 ## DI/コンポーネント設計
 - コンストラクタインジェクションを使用しているか（`@Autowired` フィールドインジェクションを避ける）
 - `@Component` / `@Service` / `@Repository` の使い分けが責務に合っているか
-- 循環依存が発生していないか
+- 循��依存が発生していないか
+
+## Clock DI（テスタビリティ）
+- `LocalDateTime.now()` を直接使用せず、`Clock` をDIして `LocalDateTime.now(clock)` を使用する
+- `Clock` インスタンスは `@Configuration` クラスで `@Bean` 登録する（`Clock.systemDefaultZone()`）
+- これによりテスト時に時間を固定でき、アサーションが確実になる
 
 ## トランザクション管理
 - `@Transactional` がApplication層（サービスクラス）に適切に設定されているか
@@ -22,6 +27,17 @@ applyTo: "**/*.java"
 - HTTPメソッド・ステータスコードのセマンティクスが正しいか
 - リクエスト/レスポンスの型に `record` を活用しているか
 - バリデーション（`@Valid`、`@NotNull` 等）が適切に設定されているか
+- `@PathVariable` はエンティティのIDのみに使用する（それ以外の属性は `@RequestParam`）
+- リソース作成時（POST）は `201 Created` + `Location` ヘッダを返す（`ResponseEntity.created(URI)`）
+- 更新時はエンティティIDを指定して更新する（IDは `save` の返却値から取得して呼び出し元に伝える）
+- Controller のメソッド命名はHTTPメソッドに寄せる（`get` / `post` / `put` / `delete`）
+
+## Repository 設計（JPA準拠）
+- `findById` は `Optional` で返す
+- `save` メソッドで insert / update の両方を処理する（メソッドを分けない）
+- `save` は保存した結果のエンティティを返却する（自動採番IDを呼び出し元に伝えるため）
+- save 後は `findById` の結果を返却する（引数ベースの値を返すと、INSERT失敗時でも値が返ってしまう）
+- 削除は `deleteById` の命名に統一する
 
 ## エラーハンドリング
 - `@RestControllerAdvice` でグローバルな例外ハンドリングを行っているか
@@ -32,6 +48,15 @@ applyTo: "**/*.java"
 ## データアクセス
 - N+1 問題が発生していないか
 - エンティティをそのままレスポンスに返していないか（層ごとに型を分離）
+- SQLはデータアクセスメソッド内に直接記述する（別の場所に分離しない。パラメータとSQLの対応が確認しづらくなる）
+- 更新行数が想定と異なる場合（2件以上更新など）は例外をスローしてロールバックする
+
+## テスト（Spring固有）
+- Repository テストでは `@DataJdbcTest` + `@AutoConfigureTestDatabase(replace = Replace.NONE)` を使用する（自動トランザクション＋ロールバック）
+- テストデータは `@Sql` で用意する（`schema.sql` / `data.sql` に依存しない）
+- save のテストでは、返却値の確認に加えて、DB上に永続化されていることまで検証する（JdbcClient等で直接確認）
+- 返却されたエンティティの全フィールドをアサーションする
+- `empty` ではなくダミーインスタンスを返却してアサーションする（どの時点の値か特定できるように）
 
 ## セキュリティ（最重要）
 - 認証・認可の設定が適切か（Spring Security の設定漏れがないか）
