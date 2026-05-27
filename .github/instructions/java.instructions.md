@@ -26,7 +26,7 @@ applyTo: "**/*.java"
 ## UUID/ID生成
 - UUIDはDB自動採番に頼らず `UUID.randomUUID().toString()` で文字列として生成する
 - IDの型は `String` で扱う（DB互換性とポータビリティのため）
-- DBカラムは `VARCHAR(36)` 程度で定義する（`TEXT` 型はインデックスが効かない）
+- UUIDを文字列で保持する場合、DBカラムは `CHAR(36)` または `VARCHAR(36)` 程度で定義する（長さ制約とデータ整合性の観点）
 
 ## パターンマッチング/最新言語機能
 - `instanceof` パターンマッチング、`switch` 式のパターンマッチングを活用しているか
