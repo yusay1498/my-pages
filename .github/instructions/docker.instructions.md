@@ -1,5 +1,5 @@
 ---
-applyTo: "**/Dockerfile,**/docker-compose*.yml,**/compose*.yaml,**/docker-compose*.yaml"
+applyTo: "**/Dockerfile,**/compose*.yml,**/docker-compose*.yml,**/compose*.yaml,**/docker-compose*.yaml"
 ---
 
 # Docker 固有レビュー観点
