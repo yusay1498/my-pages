@@ -7,7 +7,7 @@ applyTo: "**/*.java"
 ## DI/コンポーネント設計
 - コンストラクタインジェクションを使用しているか（`@Autowired` フィールドインジェクションを避ける）
 - `@Component` / `@Service` / `@Repository` の使い分けが責務に合っているか
-- 循��依存が発生していないか
+- 循環依存が発生していないか
 
 ## Clock DI（テスタビリティ）
 - `LocalDateTime.now()` を直接使用せず、`Clock` をDIして `LocalDateTime.now(clock)` を使用する
