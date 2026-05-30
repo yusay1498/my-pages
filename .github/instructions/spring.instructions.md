@@ -43,6 +43,8 @@ applyTo: "**/*.java"
 - `@RestControllerAdvice` でグローバルな例外ハンドリングを行っているか
 - エラーレスポンスは [RFC 9457 Problem Details](https://www.rfc-editor.org/rfc/rfc9457.html) に準拠しているか
 - Spring の [`ProblemDetail`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/ProblemDetail.html) を活用しているか
+- `ResponseEntity.of(ProblemDetail)` は Spring Boot 3.x（Spring Framework 6.0）以降で利用可能なオーバーロードであり、`ProblemDetail` を直接渡して `.build()` で返せる
+- Spring Framework 6.0 より前（Spring Boot 2.x 以前）では `ResponseEntity.of()` は `Optional` 専用のため、`ResponseEntity.of(ProblemDetail)` と混同しない
 - エラーレスポンスにスタックトレースや内部実装の情報を含めていないか
 
 ## データアクセス
